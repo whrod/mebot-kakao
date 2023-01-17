@@ -1,36 +1,6 @@
-// import { Server } from '@remote-kakao/core';
-// import config from '../config.json';
-
-// const server = new Server({ useKakaoLink: true });
-
-// server.on('message', async (msg) => {
-//   const prefix = '>';
-//   if (!msg.content.startsWith(prefix)) return;
-
-//   const args = msg.content.split(' ');
-//   const cmd = args.shift()?.slice(prefix.length);
-
-//   switch (cmd) {
-//     case 'ping':
-//       const timestamp = Date.now();
-//       await msg.replyText('Pong!');
-//       msg.replyText(`${Date.now() - timestamp}ms`);
-//       break;
-//     case 'kaling':
-//       msg.replyKakaoLink({
-//         id: 69201,
-//         args: { title: args[0], description: args[1] },
-//       });
-//       break;
-//   }
-// });
-
-// server.start(3000, config);
-
 import { Server, Message } from '@remote-kakao/core';
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
 import LoggerPlugin from '../plugins/logger';
-import { RemoteInfo, Socket } from 'dgram';
 
 // 카카오링크 플러그인 컨피그
 const config = {
@@ -61,7 +31,6 @@ server.on('message', async (msg) => {
     await msg.reply('Pong!');
     msg.reply(`${Date.now() - timestamp}ms`);
   }
-  //TODO: 메세지를 받으면 특정 룸에 리플라이 하는 방법
 
   // else if (cmd === 'kakaolink') {
   //   msg.replyKakaoLink({
@@ -70,5 +39,6 @@ server.on('message', async (msg) => {
   //   });
   // }
 });
+//TODO: 메세지를 받으면 특정 룸에 리플라이 하는 방법
 
 server.start(3000);
