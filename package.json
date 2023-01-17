@@ -10,8 +10,10 @@
   },
   "author": "whrod",
   "dependencies": {
+    "@notionhq/client": "^2.2.3",
     "@remote-kakao/core": "^1.0.7",
-    "@remote-kakao/kakaolink-plugin": "^1.0.8"
+    "@remote-kakao/kakaolink-plugin": "^1.0.8",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
