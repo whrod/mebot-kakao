@@ -15,11 +15,10 @@ const getTodayInNotionFormat = () => {
 };
 
 //서버시간 -> 한국시간으로
-const currentKoreaTime = (serverTime) => {
-  return new Date(Date.parse(serverTime) + 3600000 * 9);
-};
+// const currentKoreaTime = (serverTime) => {
+//   return new Date(Date.parse(serverTime) + 3600000 * 9);
+// };
 
 module.exports = {
   getTodayInNotionFormat,
-  currentKoreaTime,
 };

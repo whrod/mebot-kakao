@@ -1,5 +1,4 @@
 import { Server, Message } from '@remote-kakao/core';
-import { nextTick } from 'process';
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
 import LoggerPlugin from './plugins/logger';
 
@@ -39,7 +38,7 @@ server.on('message', async (msg) => {
 
     let result = await notionService.getTeamMembers();
     try {
-      msg.reply(result);
+      msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.log(err);
@@ -52,8 +51,9 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
 
     let result = await notionService.getListTodoWriters();
+
     try {
-      msg.reply(JSON.stringify(result));
+      msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.log(err);
@@ -75,7 +75,7 @@ server.on('message', async (msg) => {
         result.length > 0
       ) {
         msg.reply('아직 14:00 안됨 얼렁 쓰세여');
-        msg.reply(result);
+        msg.reply(result.toString().replaceAll(',', '\n'));
         msg.reply(`${Date.now() - timestamp}ms`);
       }
       if (result.length === 0) {
@@ -88,7 +88,7 @@ server.on('message', async (msg) => {
         result.length > 0
       ) {
         msg.reply('삼천원 입금 ㄱㄱ');
-        msg.reply(result);
+        msg.reply(result.toString().replaceAll(',', '\n'));
         msg.reply(`${Date.now() - timestamp}ms`);
       }
     } catch (err) {

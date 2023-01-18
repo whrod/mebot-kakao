@@ -13,12 +13,17 @@ const getTeamMembers = async () => {
     database_id: database_id,
   });
 
-  teamMembers = [];
-  for (const element of response.properties['태그'].multi_select.options) {
-    teamMembers.push(element.name);
+  let teamMembers = [];
+  for (const list of response.properties['태그'].multi_select.options) {
+    teamMembers.push(list.name);
   }
   return teamMembers;
 };
+//TODO: 스트링으로 만들것
+// let teamMembers = '👀멤버' + '\n';
+// for (const list of response.properties['태그'].multi_select.options) {
+//   teamMembers += '\n' + `${list.name}`;
+// }
 
 //금일 멤버들의 투두리스트의 리스트
 const getListTodoWriters = async () => {
@@ -31,19 +36,22 @@ const getListTodoWriters = async () => {
 
   const today = getTodayInNotionFormat();
 
-  const getListOfTodayTodoWriters = results
-    .filter((page) => today === page.properties['날짜'].date.start)
-    .map((page) => {
-      const name = page.properties['이름'].title[0].text.content;
-      const link = page.url;
-      const listTodayWriters = {};
-      listTodayWriters[name] = link;
-
-      return listTodayWriters;
+  const listOfTodayTodoWriters = results
+    .filter((data) => today === data.properties['날짜'].date.start)
+    .map((data) => {
+      const name = data.properties['이름'].title[0].text.content;
+      const link = data.url;
+      const created_time = new Date(Date.parse(data.created_time)).getHours();
+      return `${name}(${created_time}시): ${link}`;
     });
 
-  return getListOfTodayTodoWriters;
+  return listOfTodayTodoWriters;
 };
+//TODO: 스트링
+// let listOfTodayTodoWritersToString = `${today} 투두` + '\n';
+// for (const list of getListOfTodayTodoWriters) {
+//   listOfTodayTodoWritersToString += list;
+// }
 
 //제 시간(14:00) 안에 쓴 사람 목록
 const getWritersInTime = async () => {
@@ -71,6 +79,12 @@ const getWritersInTime = async () => {
 
   return writersInTime;
 };
+//TODO: 스트링
+// let writersInTimeToString = '\n';
+// for (const list of getListOfTodayTodoWriters) {
+//   listOfTodayTodoWritersToString += list;
+// }
+// return listOfTodayTodoWritersToString;
 
 //제 시간(14:01)에 쓰지 않은 사람
 const getTodayPenaltyList = async (writersInTime, teamMembers) => {
