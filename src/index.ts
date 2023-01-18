@@ -1,4 +1,5 @@
 import { Server, Message } from '@remote-kakao/core';
+import { nextTick } from 'process';
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
 import LoggerPlugin from './plugins/logger';
 
@@ -16,6 +17,7 @@ server.usePlugin(LoggerPlugin);
 - cmd enum화
 - 카카오링크
 - 주석삭제
+- @인물태그
 */
 
 //pingTest
@@ -44,12 +46,16 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
 
     let result = await notionService.getTeamMembers();
-
-    await msg.reply(result);
-    msg.reply(`${Date.now() - timestamp}ms`);
+    try {
+      msg.reply(result);
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      throw err;
+    }
   }
 });
 //투두리스트;
+//TODO: JSON 형식 재구성
 server.on('message', async (msg) => {
   if (!msg.content.startsWith(prefix)) return;
 
@@ -60,9 +66,12 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
 
     let result = await notionService.getListTodoWriters();
-
-    await msg.reply(JSON.stringify(result));
-    msg.reply(`${Date.now() - timestamp}ms`);
+    try {
+      msg.reply(JSON.stringify(result));
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      throw err;
+    }
   }
 });
 
@@ -86,18 +95,23 @@ server.on('message', async (msg) => {
     // console.log(currentTime, '--newDate--');
     // console.log(currentTime.getTimezoneOffset());
     // console.log(currentTime.getHours());
-
-    if (currentTime.getHours() < 14) {
-      await msg.reply('아직 14:00 안됨 얼렁 쓰세여');
-      msg.reply(`${Date.now() - timestamp}ms`);
-    }
-    if (result.length > 0) {
-      await msg.reply(JSON.stringify(result));
-      msg.reply(`${Date.now() - timestamp}ms`);
-    }
-    if (result.length === 0) {
-      await msg.reply('금일 벌금자 없음');
-      msg.reply(`${Date.now() - timestamp}ms`);
+    try {
+      if (currentTime.getHours() <= 14 && result.length > 0) {
+        msg.reply('아직 14:00 안됨 얼렁 쓰세여');
+        msg.reply(result);
+        msg.reply(`${Date.now() - timestamp}ms`);
+      }
+      if (result.length === 0) {
+        msg.reply('금일 벌금자 없음');
+        msg.reply(`${Date.now() - timestamp}ms`);
+      }
+      if (currentTime.getHours() > 14 && result.length > 0) {
+        msg.reply('삼천원 입금 ㄱㄱ');
+        msg.reply(result);
+        msg.reply(`${Date.now() - timestamp}ms`);
+      }
+    } catch (err) {
+      throw err;
     }
   }
 });
