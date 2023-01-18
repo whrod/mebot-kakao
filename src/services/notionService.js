@@ -59,36 +59,18 @@ const getWritersInTime = async () => {
   const writersInTime = results
     .filter((data) => today === data.properties['날짜'].date.start) // 금일 날짜 조건
     .map((data) => {
-      const currentKoreaTime = new Date(
-        Date.parse(data.created_time) + 3600000 * 9
-      );
-
-      data.created_time = currentKoreaTime;
+      data.created_time = new Date(Date.parse(data.created_time));
       return data;
-    })
+    }) //날짜 type string => date로(getHours()하기 위해, getHours()는 한국시간으로 안바꿔야함)
     .filter(
       (data) =>
-        data.created_time.getHours() <= 14 &&
-        data.created_time.getMinutes() <= 01
-    ) //한국시간 변경 후 14:01까지 쓴사람
+        data.created_time.getHours() < 14 ||
+        (data.created_time.getHours() == 14 && new Date().getMinutes() < 1)
+    ) //14:01까지 쓴사람
     .map((page) => page.properties['이름'].title[0].text.content); //이름만 다시 뽑은 배열
-  // console.log(todayWritersInTime)
 
   return writersInTime;
 };
-
-// const getTodayPenaltyList = async (todoWriters, teamMembers) => {
-//   todoWriters = await getListTodoWriters();
-
-//   teamMembers = await getTeamMembers();
-
-//   const getNamesFromTodoWriters = await todoWriters
-//     .map((name) => Object.keys(name))
-//     .flat();
-//   return teamMembers
-//     .filter((name) => !getNamesFromTodoWriters.includes(name))
-//     .map((name) => '@' + name);
-// };
 
 //제 시간(14:01)에 쓰지 않은 사람
 const getTodayPenaltyList = async (writersInTime, teamMembers) => {
@@ -101,19 +83,26 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
     .map((name) => '@' + name);
 };
 
-//** Notion API function output test **
+//** Notion API 기능 출력 Test **
 (async () => {
   const todoWriters = await getListTodoWriters();
-  console.log(todoWriters, '--ToDoWriters--');
+  console.log('►TodoLists: ', todoWriters);
+  console.log('-------------------------\n');
 
   const writersInTime = await getWritersInTime();
-  console.log(writersInTime, '--InTime--');
+  console.log('►InTime: ', writersInTime);
+  console.log('-------------------------\n');
 
   const teamMembers = await getTeamMembers();
-  console.log(teamMembers, '--TeamMembers--');
+  console.log('►TeamMembers: ', teamMembers);
+  console.log('-------------------------\n');
 
-  const todayPenaltyList = await getTodayPenaltyList(todoWriters, teamMembers);
-  console.log(todayPenaltyList, '--PenaltyList--');
+  const todayPenaltyList = await getTodayPenaltyList(
+    writersInTime,
+    teamMembers
+  );
+  console.log('►PenaltyLIst: ', todayPenaltyList);
+  console.log('-------------------------');
 })();
 
 module.exports = {

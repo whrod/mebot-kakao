@@ -1,5 +1,5 @@
+//yyyy-mm-dd 포맷 날짜 생성
 const getTodayInNotionFormat = () => {
-  //yyyy-mm-dd 포맷 날짜 생성
   let today = new Date();
   return (
     today.getFullYear() +
@@ -13,8 +13,13 @@ const getTodayInNotionFormat = () => {
       : '0' + today.getDate().toString())
   );
 };
-//TODO: 브라우저 표준시간 확인 작업 필요
+
+//서버시간 -> 한국시간으로
+const currentKoreaTime = (serverTime) => {
+  return new Date(Date.parse(serverTime) + 3600000 * 9);
+};
 
 module.exports = {
   getTodayInNotionFormat,
+  currentKoreaTime,
 };
