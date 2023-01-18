@@ -56,16 +56,17 @@ const getTodayPenaltyList = async (todoWriters, teamMembers) => {
     .map((name) => '@' + name);
 };
 
-(async () => {
-  const todoWriters = await getListTodoWriters();
-  console.log(todoWriters, '--ToDoWriters--');
+// ** Notion API function output test **
+// (async () => {
+//   const todoWriters = await getListTodoWriters();
+//   console.log(todoWriters, '--ToDoWriters--');
 
-  const teamMembers = await getTeamMembers();
-  console.log(teamMembers, '--TeamMembers--');
+//   const teamMembers = await getTeamMembers();
+//   console.log(teamMembers, '--TeamMembers--');
 
-  const todayPenaltyList = await getTodayPenaltyList(todoWriters, teamMembers);
-  console.log(todayPenaltyList, '--PenaltyList--');
-})();
+//   const todayPenaltyList = await getTodayPenaltyList(todoWriters, teamMembers);
+//   console.log(todayPenaltyList, '--PenaltyList--');
+// })();
 
 module.exports = {
   getTeamMembers,
