@@ -84,26 +84,26 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
 };
 
 //** Notion API 기능 출력 Test **
-(async () => {
-  const todoWriters = await getListTodoWriters();
-  console.log('►TodoLists: ', todoWriters);
-  console.log('-------------------------\n');
+// (async () => {
+//   const todoWriters = await getListTodoWriters();
+//   console.log('►TodoLists: ', todoWriters);
+//   console.log('-------------------------\n');
 
-  const writersInTime = await getWritersInTime();
-  console.log('►InTime: ', writersInTime);
-  console.log('-------------------------\n');
+//   const writersInTime = await getWritersInTime();
+//   console.log('►InTime: ', writersInTime);
+//   console.log('-------------------------\n');
 
-  const teamMembers = await getTeamMembers();
-  console.log('►TeamMembers: ', teamMembers);
-  console.log('-------------------------\n');
+//   const teamMembers = await getTeamMembers();
+//   console.log('►TeamMembers: ', teamMembers);
+//   console.log('-------------------------\n');
 
-  const todayPenaltyList = await getTodayPenaltyList(
-    writersInTime,
-    teamMembers
-  );
-  console.log('►PenaltyLIst: ', todayPenaltyList);
-  console.log('-------------------------');
-})();
+//   const todayPenaltyList = await getTodayPenaltyList(
+//     writersInTime,
+//     teamMembers
+//   );
+//   console.log('►PenaltyLIst: ', todayPenaltyList);
+//   console.log('-------------------------');
+// })();
 
 module.exports = {
   getTeamMembers,
