@@ -11,12 +11,13 @@ server.usePlugin(LoggerPlugin);
 // server.usePlugin(KakaoLinkPlugin, config);
 
 /* TODO:
-- 알림 기능
-- 중복 코드 간소화 (클래스 활용)
+- 알람 기능
+- 중복 코드 간소화 (mapping) => 성능비교
 - 상수 enum화
 - 카카오링크
 - 주석삭제
 - @인물태그
+- 에러핸들링(배열.length === 0일때, async,await)
 */
 
 server.on('message', async (msg) => {

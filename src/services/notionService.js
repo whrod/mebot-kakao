@@ -26,6 +26,7 @@ const getTeamMembers = async () => {
 // }
 
 //금일 멤버들의 투두리스트의 리스트
+//TODO:투두리스트 작성시간이 오늘이 아닐때 처리
 const getListTodoWriters = async () => {
   const payload = {
     path: `databases/${database_id}/query`,
