@@ -1,6 +1,7 @@
 import { Server, Message } from '@remote-kakao/core';
-// import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
 import LoggerPlugin from './plugins/logger';
+// import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
+// import config from '../config.json';
 
 const notionService = require('./services/notionService');
 
@@ -12,12 +13,12 @@ server.usePlugin(LoggerPlugin);
 
 /* TODO:
 - 알람 기능
-- 중복 코드 간소화 (mapping) => 성능비교
+- 중복 코드 간소화 (mapping)
 - 상수 enum화
 - 카카오링크
 - 주석삭제
 - @인물태그
-- 에러핸들링(배열.length === 0일때, async,await)
+- 에러핸들링(배열.length === 0일때, promise)
 */
 
 server.on('message', async (msg) => {
@@ -46,8 +47,7 @@ server.on('message', async (msg) => {
     }
   }
 
-  //팀원들 투두리스트(이름:url)
-  //TODO: JSON 형식 어떻게 보낼지 고민
+  //팀원들 투두리스트(이름(작성시간):url)
   if (cmd === '투두리스트') {
     const timestamp = Date.now();
 
@@ -80,7 +80,7 @@ server.on('message', async (msg) => {
         msg.reply(`${Date.now() - timestamp}ms`);
       }
       if (result.length === 0) {
-        msg.reply('금일 벌금자 없음');
+        msg.reply('금일 벌금자 없음'); // i18n
         msg.reply(`${Date.now() - timestamp}ms`);
       }
       if (

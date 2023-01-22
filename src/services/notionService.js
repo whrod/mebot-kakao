@@ -13,17 +13,12 @@ const getTeamMembers = async () => {
     database_id: database_id,
   });
 
-  let teamMembers = [];
+  let teamMembers = []; //TODO: 고차함수 활용
   for (const list of response.properties['태그'].multi_select.options) {
     teamMembers.push(list.name);
   }
   return teamMembers;
 };
-//TODO: 스트링으로 만들것
-// let teamMembers = '👀멤버' + '\n';
-// for (const list of response.properties['태그'].multi_select.options) {
-//   teamMembers += '\n' + `${list.name}`;
-// }
 
 //금일 멤버들의 투두리스트의 리스트
 //TODO:투두리스트 작성시간이 오늘이 아닐때 처리
@@ -48,11 +43,6 @@ const getListTodoWriters = async () => {
 
   return listOfTodayTodoWriters;
 };
-//TODO: 스트링
-// let listOfTodayTodoWritersToString = `${today} 투두` + '\n';
-// for (const list of getListOfTodayTodoWriters) {
-//   listOfTodayTodoWritersToString += list;
-// }
 
 //제 시간(14:00) 안에 쓴 사람 목록
 const getWritersInTime = async () => {
@@ -80,12 +70,6 @@ const getWritersInTime = async () => {
 
   return writersInTime;
 };
-//TODO: 스트링
-// let writersInTimeToString = '\n';
-// for (const list of getListOfTodayTodoWriters) {
-//   listOfTodayTodoWritersToString += list;
-// }
-// return listOfTodayTodoWritersToString;
 
 //제 시간(14:01)에 쓰지 않은 사람
 const getTodayPenaltyList = async (writersInTime, teamMembers) => {
@@ -98,27 +82,27 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
     .map((name) => '@' + name);
 };
 
-// ** Notion API 기능 출력 Test **
-(async () => {
-  const todoWriters = await getListTodoWriters();
-  console.log('►TodoLists: ', todoWriters);
-  console.log('-------------------------\n');
+// // ** Notion API 기능 출력 Test **
+// (async () => {
+//   const todoWriters = await getListTodoWriters();
+//   console.log('►TodoLists: ', todoWriters);
+//   console.log('-------------------------\n');
 
-  const writersInTime = await getWritersInTime();
-  console.log('►InTime: ', writersInTime);
-  console.log('-------------------------\n');
+//   const writersInTime = await getWritersInTime();
+//   console.log('►InTime: ', writersInTime);
+//   console.log('-------------------------\n');
 
-  const teamMembers = await getTeamMembers();
-  console.log('►TeamMembers: ', teamMembers);
-  console.log('-------------------------\n');
+//   const teamMembers = await getTeamMembers();
+//   console.log('►TeamMembers: ', teamMembers);
+//   console.log('-------------------------\n');
 
-  const todayPenaltyList = await getTodayPenaltyList(
-    writersInTime,
-    teamMembers
-  );
-  console.log('►PenaltyLIst: ', todayPenaltyList);
-  console.log('-------------------------');
-})();
+//   const todayPenaltyList = await getTodayPenaltyList(
+//     writersInTime,
+//     teamMembers
+//   );
+//   console.log('►PenaltyLIst: ', todayPenaltyList);
+//   console.log('-------------------------');
+// })();
 
 module.exports = {
   getTeamMembers,
