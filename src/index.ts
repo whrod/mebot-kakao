@@ -1,11 +1,9 @@
 /* TODO:
-- 알람 기능
+- 알람 기능 (socket 활용 방안 고안)
 - 중복 코드 간소화 (mapping)
 - 상수 관리
 - 에러핸들링(promise)
-- 카카오링크
-- @인물태그
-- 주석삭제
+- 에러핸들링 커맨드 입력 가능 시간 관리
 */
 
 import { Server } from '@remote-kakao/core';
@@ -34,27 +32,47 @@ server.on('message', async (msg) => {
   if (cmd === 'ping') {
     const timestamp = Date.now();
 
-    await msg.reply('Pong!');
-    msg.reply(`${Date.now() - timestamp}ms`);
+    await msg.reply('Pong!').catch(() => {
+      console.log(Error);
+    });
+    try {
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
   }
 
   //오픈톡방 09:00 알람에 따른 응답 메세지
   //TODO: 개발 관련 기사 크롤링해서 공유하기
   if (msg.room === 'KCbot' && cmd === 'morning9:00') {
     const timestamp = Date.now();
-    await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기');
-    msg.reply(
-      'https://www.notion.so/42e60fb224c74b748c1b30e1cda3fba6',
-      '취업뽀개기'
-    );
-    msg.reply(`${Date.now() - timestamp}ms`);
+    await msg
+      .reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기')
+      .catch(() => {
+        console.log(Error);
+        msg.reply(Error.name);
+      });
+    try {
+      msg.reply(
+        'https://www.notion.so/42e60fb224c74b748c1b30e1cda3fba6',
+        '취업뽀개기'
+      );
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
   }
 
   //오픈톡방 14:01 알람에 따른 응답 메세지
   if (msg.room === 'KCbot' && cmd === 'afternoon14:01') {
     const timestamp = Date.now();
 
-    let result = await notionService.getTodayPenaltyList();
+    let result = await notionService.getTodayPenaltyList().catch(() => {
+      console.log(Error);
+      msg.reply(Error.name);
+    });
 
     try {
       if (result.length > 0) {
@@ -67,7 +85,8 @@ server.on('message', async (msg) => {
         msg.reply(`${Date.now() - timestamp}ms`);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      msg.reply(`${err}`);
     }
   }
 
@@ -75,12 +94,17 @@ server.on('message', async (msg) => {
   if (cmd === '팀원') {
     const timestamp = Date.now();
 
-    let result = await notionService.getTeamMembers();
+    let result = await notionService.getTeamMembers().catch(() => {
+      console.log(Error);
+      msg.reply(Error.name);
+    });
+
     try {
       msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      msg.reply(`${err}`);
     }
   }
 
@@ -88,7 +112,10 @@ server.on('message', async (msg) => {
   if (cmd === '투두리스트') {
     const timestamp = Date.now();
 
-    let result = await notionService.getListTodoWriters();
+    let result = await notionService.getListTodoWriters().catch(() => {
+      console.log(Error);
+      msg.reply(Error.name);
+    });
 
     try {
       if (result.length === 0) {
@@ -97,7 +124,8 @@ server.on('message', async (msg) => {
       msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      msg.reply(`${err}`);
     }
   }
 
@@ -107,7 +135,10 @@ server.on('message', async (msg) => {
 
     const currentTime = new Date();
 
-    let result = await notionService.getTodayPenaltyList();
+    let result = await notionService.getTodayPenaltyList().catch(() => {
+      console.log(Error);
+      msg.reply(Error.name);
+    });
 
     try {
       if (
@@ -133,7 +164,8 @@ server.on('message', async (msg) => {
         msg.reply(`${Date.now() - timestamp}ms`);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      msg.reply(`${err}`);
     }
   }
 });
