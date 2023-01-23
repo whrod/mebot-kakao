@@ -1,27 +1,31 @@
+/* TODO:
+- 알람 기능
+- 중복 코드 간소화 (mapping)
+- 상수 enum화
+- 에러핸들링(배열.length === 0일때, promise)
+- 카카오링크
+- @인물태그
+- 주석삭제
+*/
+
 import { Server, Message } from '@remote-kakao/core';
 import LoggerPlugin from './plugins/logger';
+
+//FIXME: 카카오링크 사용시
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
-// import config from '../config.json';
+// import config from '../config.json'
 
 const notionService = require('./services/notionService');
 
 const prefix = '>';
 const server = new Server();
-
 server.usePlugin(LoggerPlugin);
+
+//FIXME: 카카오링크 사용시
 // server.usePlugin(KakaoLinkPlugin, config);
 
-/* TODO:
-- 알람 기능
-- 중복 코드 간소화 (mapping)
-- 상수 enum화
-- 카카오링크
-- 주석삭제
-- @인물태그
-- 에러핸들링(배열.length === 0일때, promise)
-*/
-
 server.on('message', async (msg) => {
+  console.log(msg);
   if (!msg.content.startsWith(prefix)) return;
 
   const args = msg.content.split(' ');
@@ -32,6 +36,11 @@ server.on('message', async (msg) => {
 
     await msg.reply('Pong!');
     msg.reply(`${Date.now() - timestamp}ms`);
+  }
+  //A방의 커맨드를 B방에서 응답하기
+  if (msg.room === 'test' && cmd === 'test') {
+    const timestamp = Date.now();
+    msg.reply(`${Date.now() - timestamp}ms`, 'test2');
   }
 
   //팀원 리스트
@@ -48,6 +57,7 @@ server.on('message', async (msg) => {
   }
 
   //팀원들 투두리스트(이름(작성시간):url)
+  //TODO: length===0일때 처리
   if (cmd === '투두리스트') {
     const timestamp = Date.now();
 
@@ -98,7 +108,7 @@ server.on('message', async (msg) => {
   }
 });
 
-// 카카오링크 사용시
+// FIXME: 카카오링크 사용시
 // else if (cmd === 'kakaolink') {
 //   msg.replyKakaoLink({
 //     id: "00000", // 여기에 카카오 디벨로퍼 메시지 템플릿 코드 입력
