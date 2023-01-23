@@ -4,9 +4,11 @@
 - 상수 관리
 - 에러핸들링(promise)
 - 에러핸들링 커맨드 입력 가능 시간 관리
+- github action ci/cd 구축
 */
 
 import { Server } from '@remote-kakao/core';
+import { resourceLimits } from 'worker_threads';
 import LoggerPlugin from './plugins/logger';
 
 //FIXME: 카카오링크 사용시
@@ -34,6 +36,7 @@ server.on('message', async (msg) => {
 
     await msg.reply('Pong!').catch(() => {
       console.log(Error);
+      msg.reply(Error.name);
     });
     try {
       msg.reply(`${Date.now() - timestamp}ms`);
@@ -118,11 +121,16 @@ server.on('message', async (msg) => {
     });
 
     try {
-      if (result.length === 0) {
-        msg.reply('아직 아무도 안씀!!');
+      switch (result.length) {
+        case 0:
+          msg.reply('아직 아무도 안씀!!');
+          msg.reply(`${Date.now() - timestamp}ms`);
+          break;
+
+        default:
+          msg.reply(result.toString().replaceAll(',', '\n'));
+          msg.reply(`${Date.now() - timestamp}ms`);
       }
-      msg.reply(result.toString().replaceAll(',', '\n'));
-      msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
       msg.reply(`${err}`);
@@ -132,7 +140,6 @@ server.on('message', async (msg) => {
   //제 시간(14:00)에 투두 작성하지 않은 사람 리스트
   if (cmd === '투두벌금') {
     const timestamp = Date.now();
-
     const currentTime = new Date();
 
     let result = await notionService.getTodayPenaltyList().catch(() => {
@@ -141,27 +148,31 @@ server.on('message', async (msg) => {
     });
 
     try {
-      if (
-        (currentTime.getHours() < 14 ||
-          (currentTime.getHours() == 14 && currentTime.getMinutes() < 1)) &&
-        result.length > 0
-      ) {
-        msg.reply('아직 14:00 안됨 얼렁 쓰세여');
-        msg.reply(result.toString().replaceAll(',', '\n'));
-        msg.reply(`${Date.now() - timestamp}ms`);
-      }
-      if (result.length === 0) {
-        msg.reply('금일 벌금자 없음'); // i18n
-        msg.reply(`${Date.now() - timestamp}ms`);
-      }
-      if (
-        (currentTime.getHours() > 14 ||
-          (currentTime.getHours() == 14 && currentTime.getMinutes() >= 1)) &&
-        result.length > 0
-      ) {
-        msg.reply('삼천원 입금 ㄱㄱ');
-        msg.reply(result.toString().replaceAll(',', '\n'));
-        msg.reply(`${Date.now() - timestamp}ms`);
+      switch (result.length) {
+        case 0:
+          msg.reply('금일 벌금자 없음');
+          msg.reply(`${Date.now() - timestamp}ms`);
+          console.log('case0');
+          break;
+
+        default:
+          if (
+            currentTime.getHours() < 14 ||
+            (currentTime.getHours() == 14 && currentTime.getMinutes() < 1)
+          ) {
+            msg.reply('아직 14:00 안됨 얼렁 쓰세여');
+            msg.reply(result.toString().replaceAll(',', '\n'));
+            msg.reply(`${Date.now() - timestamp}ms`);
+          }
+
+          if (
+            currentTime.getHours() > 14 ||
+            (currentTime.getHours() == 14 && currentTime.getMinutes() >= 1)
+          ) {
+            msg.reply('삼천원 입금 ㄱㄱ');
+            msg.reply(result.toString().replaceAll(',', '\n'));
+            msg.reply(`${Date.now() - timestamp}ms`);
+          }
       }
     } catch (err) {
       console.error(err);
