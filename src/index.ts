@@ -8,12 +8,11 @@
 */
 
 import { Server } from '@remote-kakao/core';
-import { resourceLimits } from 'worker_threads';
 import LoggerPlugin from './plugins/logger';
+import config from '../config.json';
 
 //FIXME: 카카오링크 사용시
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
-// import config from '../config.json'
 
 const notionService = require('./services/notionService');
 
@@ -33,6 +32,7 @@ server.on('message', async (msg) => {
   //pingTest
   if (cmd === 'ping') {
     const timestamp = Date.now();
+    console.log(msg);
 
     await msg.reply('Pong!').catch(() => {
       console.log(Error);
@@ -50,17 +50,10 @@ server.on('message', async (msg) => {
   //TODO: 개발 관련 기사 크롤링해서 공유하기
   if (msg.room === 'KCbot' && cmd === 'morning9:00') {
     const timestamp = Date.now();
-    await msg
-      .reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기')
-      .catch(() => {
-        console.log(Error);
-        msg.reply(Error.name);
-      });
     try {
-      msg.reply(
-        'https://www.notion.so/42e60fb224c74b748c1b30e1cda3fba6',
-        '취업뽀개기'
-      );
+      await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '테스트3');
+
+      msg.reply(config.notionPage, '테스트3');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
