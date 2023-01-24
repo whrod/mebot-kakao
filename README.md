@@ -13,7 +13,7 @@
 
 ## usage
 
-`yarn install`
-`npm install`
-(@notionhq/client")
+`yarn install`<br>
+`npm install`<br>
+(@notionhq/client)<br>
 `yarn start`
