@@ -6,6 +6,7 @@
 - 에러핸들링 커맨드 입력 가능 시간 관리
 - github action ci/cd 구축
 - 주말, 공휴일에 작동하지 않게
+- 테스트코드 작성
 */
 
 import { Server } from '@remote-kakao/core';
@@ -47,13 +48,13 @@ server.on('message', async (msg) => {
   //TODO: 개발 관련 기사 크롤링해서 공유하기
   //FIXME: 세션 저장되는지 확인
 
-  //세션테스트
+  // 세션테스트
   // if (msg.room === 'KCbot' && cmd === 'sessionTest') {
   //   const timestamp = Date.now();
 
   //   try {
-  //     await msg.reply('test!', 'test5');
-  //     msg.reply(config.notionPage, 'test5');
+  //     await msg.reply('test!', '취업뽀개기');
+  //     msg.reply(config.notionPage, '취업뽀개기');
   //     msg.reply(`${Date.now() - timestamp}ms`);
   //   } catch (err) {
   //     console.error(err);

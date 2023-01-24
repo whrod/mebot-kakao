@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "mebot-kakao",
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
