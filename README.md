@@ -5,7 +5,7 @@
 - [x] 스터디 그룹 멤버 확인
 - [x] 오늘 스터디 투두 리스트 확인
 - [x] 오늘 스터디 투두 리스트 미작성자 확인
-- [ ] 투두리스트 알람 기능
+- [x] 투두리스트 알람 기능
 - [ ] 벌금 DB, 계산, 알람
 - [ ] 에러 핸들링
 - [ ] express router 합치기
@@ -14,4 +14,6 @@
 ## usage
 
 `yarn install`
+`npm install`
+(@notionhq/client")
 `yarn start`

@@ -13,10 +13,9 @@ const getTeamMembers = async () => {
     database_id: database_id,
   });
 
-  let teamMembers = []; //TODO: 고차함수 활용
-  for (const list of response.properties['태그'].multi_select.options) {
-    teamMembers.push(list.name);
-  }
+  let teamMembers = response.properties['태그'].multi_select.options.map(
+    (list) => list.name
+  );
   return teamMembers;
 };
 

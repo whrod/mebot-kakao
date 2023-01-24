@@ -5,6 +5,7 @@
 - 에러핸들링(promise)
 - 에러핸들링 커맨드 입력 가능 시간 관리
 - github action ci/cd 구축
+- 주말, 공휴일에 작동하지 않게
 */
 
 import { Server } from '@remote-kakao/core';
@@ -32,13 +33,9 @@ server.on('message', async (msg) => {
   //pingTest
   if (cmd === 'ping') {
     const timestamp = Date.now();
-    console.log(msg);
 
-    await msg.reply('Pong!').catch(() => {
-      console.log(Error);
-      msg.reply(Error.name);
-    });
     try {
+      await msg.reply('Pong!');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -48,12 +45,30 @@ server.on('message', async (msg) => {
 
   //오픈톡방 09:00 알람에 따른 응답 메세지
   //TODO: 개발 관련 기사 크롤링해서 공유하기
+  //FIXME: 세션 저장되는지 확인
+
+  //세션테스트
+  // if (msg.room === 'KCbot' && cmd === 'sessionTest') {
+  //   const timestamp = Date.now();
+
+  //   try {
+  //     await msg.reply('test!', 'test5');
+  //     msg.reply(config.notionPage, 'test5');
+  //     msg.reply(`${Date.now() - timestamp}ms`);
+  //   } catch (err) {
+  //     console.error(err);
+  //     msg.reply(`${err}`);
+  //   }
+  // }
+
+  //오픈톡방 09:00 알람에 따른 응답 메세지
+  //TODO: 개발 관련 기사 크롤링해서 공유하기
   if (msg.room === 'KCbot' && cmd === 'morning9:00') {
     const timestamp = Date.now();
-    try {
-      await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '테스트3');
 
-      msg.reply(config.notionPage, '테스트3');
+    try {
+      await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기');
+      msg.reply(config.notionPage, '취업뽀개기');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -65,14 +80,11 @@ server.on('message', async (msg) => {
   if (msg.room === 'KCbot' && cmd === 'afternoon14:01') {
     const timestamp = Date.now();
 
-    let result = await notionService.getTodayPenaltyList().catch(() => {
-      console.log(Error);
-      msg.reply(Error.name);
-    });
-
     try {
+      let result = await notionService.getTodayPenaltyList();
+
       if (result.length > 0) {
-        msg.reply('삼천원 입금 ㄱㄱ', '취업뽀개기');
+        msg.reply('14시 컷', '취업뽀개기');
         msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
         msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -90,12 +102,8 @@ server.on('message', async (msg) => {
   if (cmd === '팀원') {
     const timestamp = Date.now();
 
-    let result = await notionService.getTeamMembers().catch(() => {
-      console.log(Error);
-      msg.reply(Error.name);
-    });
-
     try {
+      let result = await notionService.getTeamMembers();
       msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
@@ -107,13 +115,9 @@ server.on('message', async (msg) => {
   //팀원들 투두리스트(이름(작성시간):url)
   if (cmd === '투두리스트') {
     const timestamp = Date.now();
-
-    let result = await notionService.getListTodoWriters().catch(() => {
-      console.log(Error);
-      msg.reply(Error.name);
-    });
-
     try {
+      let result = await notionService.getListTodoWriters();
+
       switch (result.length) {
         case 0:
           msg.reply('아직 아무도 안씀!!');
@@ -135,12 +139,9 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
     const currentTime = new Date();
 
-    let result = await notionService.getTodayPenaltyList().catch(() => {
-      console.log(Error);
-      msg.reply(Error.name);
-    });
-
     try {
+      let result = await notionService.getTodayPenaltyList();
+
       switch (result.length) {
         case 0:
           msg.reply('금일 벌금자 없음');
