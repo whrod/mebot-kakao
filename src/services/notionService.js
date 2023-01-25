@@ -5,6 +5,7 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 const database_id = process.env.NOTION_DATABASE_ID;
+const notionPage = process.env.NOTION_PAGE;
 const { getTodayInNotionFormat } = require('../utils/dateFormat');
 
 //팀멤버
@@ -108,4 +109,5 @@ module.exports = {
   getListTodoWriters,
   getTodayPenaltyList,
   getWritersInTime,
+  notionPage,
 };

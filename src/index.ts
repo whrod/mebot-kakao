@@ -11,10 +11,10 @@
 
 import { Server } from '@remote-kakao/core';
 import LoggerPlugin from './plugins/logger';
-import config from '../config.json';
 
 //FIXME: 카카오링크 사용시
 // import KakaoLinkPlugin from '@remote-kakao/kakaolink-plugin';
+// import config from '../config.json';
 
 const notionService = require('./services/notionService');
 
@@ -69,7 +69,7 @@ server.on('message', async (msg) => {
 
     try {
       await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기');
-      msg.reply(config.notionPage, '취업뽀개기');
+      msg.reply(notionService.notionPage, '취업뽀개기');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
