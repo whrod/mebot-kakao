@@ -82,6 +82,9 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
     .map((name) => '@' + name);
 };
 
+console.log(notionPage);
+console.log(process.env.NOTION_DATABASE_ID);
+console.log(process.env.NOTION_TOKEN);
 // // ** Notion API 기능 출력 Test **
 // (async () => {
 //   const todoWriters = await getListTodoWriters();

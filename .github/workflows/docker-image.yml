@@ -49,6 +49,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
+          build-args: |
+            NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
+            NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID}}
+            NOTION_PAGE=${{ secrets.NOTION_PAGE}}
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
