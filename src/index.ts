@@ -7,6 +7,7 @@
 - github action ci/cd 구축
 - 주말, 공휴일에 작동하지 않게
 - 테스트코드 작성
+- 배포시 .env 보안 관련
 */
 
 import { Server } from '@remote-kakao/core';
