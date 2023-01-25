@@ -27,7 +27,6 @@ server.usePlugin(LoggerPlugin);
 
 server.on('message', async (msg) => {
   if (!msg.content.startsWith(prefix)) return;
-
   const args = msg.content.split(' ');
   const cmd = args.shift()?.slice(prefix.length);
 
