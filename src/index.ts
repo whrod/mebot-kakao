@@ -81,12 +81,13 @@ server.on('message', async (msg) => {
       let result = await notionService.getTodayPenaltyList();
 
       if (result.length > 0) {
-        msg.reply('14시 컷', '취업뽀개기');
+        msg.reply('😇삼천원!', '취업뽀개기');
+        msg.reply('카카오뱅크: 3333-25-2512313');
         msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
         msg.reply(`${Date.now() - timestamp}ms`);
       }
       if (result.length === 0) {
-        msg.reply('금일 벌금자 없음', '취업뽀개기'); // i18n
+        msg.reply('😌금일 벌금자 없음', '취업뽀개기'); // i18n
         msg.reply(`${Date.now() - timestamp}ms`);
       }
     } catch (err) {
@@ -117,7 +118,7 @@ server.on('message', async (msg) => {
 
       switch (result.length) {
         case 0:
-          msg.reply('아직 아무도 안씀!!');
+          msg.reply('아직 아무도 안씀!!😤');
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
@@ -160,7 +161,8 @@ server.on('message', async (msg) => {
             currentTime.getHours() > 14 ||
             (currentTime.getHours() == 14 && currentTime.getMinutes() >= 1)
           ) {
-            msg.reply('삼천원 입금 ㄱㄱ');
+            msg.reply('입금하셨나요😝?');
+            msg.reply('카카오뱅크: 3333-25-2512313');
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
