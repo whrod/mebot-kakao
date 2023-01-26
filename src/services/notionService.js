@@ -83,9 +83,9 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
 };
 
 // // ** ENV 연결 확인 출력 **
-// console.log('►NotionPage: ',notionPage);
-// console.log('►NotionDatabaseId: ',process.env.NOTION_DATABASE_ID);
-// console.log('►NotionToken: ',process.env.NOTION_TOKEN);
+// console.log('►NotionPage: ', notionPage);
+// console.log('►NotionDatabaseId: ', process.env.NOTION_DATABASE_ID);
+// console.log('►NotionToken: ', process.env.NOTION_TOKEN);
 // // ** Notion API 기능 출력 **
 // (async () => {
 //   const todoWriters = await getListTodoWriters();
