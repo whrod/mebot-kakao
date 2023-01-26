@@ -146,4 +146,4 @@ dist
 # config
 config.json
 config.example.json
-pm2.config.json
+dev.pm2.config.json
