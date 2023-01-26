@@ -64,7 +64,7 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
 
     try {
-      await msg.reply('굿모닝:) 투두리스트 작성해주세요!', '취업뽀개기');
+      await msg.reply('굿모닝🤪 투두리스트 작성해주세요!', '취업뽀개기');
       msg.reply(notionService.notionPage, '취업뽀개기');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
@@ -82,7 +82,7 @@ server.on('message', async (msg) => {
 
       if (result.length > 0) {
         msg.reply('😇삼천원!', '취업뽀개기');
-        msg.reply('카카오뱅크: 3333-25-2512313');
+        msg.reply('카카오뱅크: 3333-25-2512313', '취업뽀개기');
         msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
         msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -142,7 +142,7 @@ server.on('message', async (msg) => {
 
       switch (result.length) {
         case 0:
-          msg.reply('금일 벌금자 없음');
+          msg.reply('😌금일 벌금자 없음');
           msg.reply(`${Date.now() - timestamp}ms`);
           console.log('case0');
           break;
@@ -152,7 +152,7 @@ server.on('message', async (msg) => {
             currentTime.getHours() < 14 ||
             (currentTime.getHours() == 14 && currentTime.getMinutes() < 1)
           ) {
-            msg.reply('아직 14:00 안됨 얼렁 쓰세여');
+            msg.reply('아직 14:00 안됨 얼렁 쓰세여🤟');
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
