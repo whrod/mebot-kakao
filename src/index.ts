@@ -1,13 +1,11 @@
 /* TODO:
 - 알람 기능 (socket 활용 방안 고안)
-- 중복 코드 간소화 (mapping)
-- 상수 관리
+- 리팩토링 : 함수 mapping
+- 리팩토링 : 상수 관리
 - 에러핸들링(promise)
-- 에러핸들링 커맨드 입력 가능 시간 관리
-- github action ci/cd 구축
-- 주말, 공휴일에 작동하지 않게
-- 테스트코드 작성
-- 배포시 .env 보안 관련
+- 에러핸들링(JSON.parse)
+- 주말, 공휴일 작동 로직
+- 테스트코드
 */
 
 import { Server } from '@remote-kakao/core';
@@ -26,6 +24,8 @@ server.usePlugin(LoggerPlugin);
 //FIXME: 카카오링크 사용시
 // server.usePlugin(KakaoLinkPlugin, config);
 
+//FIXME: 응답지연됐을때 promise rejected 관련 에러 핸들링
+//       긴 메세지 JSON.parse 관련 에러 핸들링
 server.on('message', async (msg) => {
   if (!msg.content.startsWith(prefix)) return;
   const args = msg.content.split(' ');
@@ -43,10 +43,6 @@ server.on('message', async (msg) => {
       msg.reply(`${err}`);
     }
   }
-
-  //오픈톡방 09:00 알람에 따른 응답 메세지
-  //TODO: 개발 관련 기사 크롤링해서 공유하기
-  //FIXME: 세션 저장되는지 확인
 
   // 세션테스트
   // if (msg.room === 'KCbot' && cmd === 'sessionTest') {
