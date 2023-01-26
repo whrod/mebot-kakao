@@ -43,3 +43,28 @@
 `yarn install`<br>
 `npm install`<br>
 `yarn start`
+
+**로컬에서 PM2 운영시 env 추가 필요**
+
+```JSON
+//ex: dev.pm2.config.json
+{
+  "apps": [
+    {
+      "name": "mebot-kakao",
+      "cwd": "src",
+      "script": "ts-node index.ts",
+      "watch": true,
+      "autorestart": true,
+      "max_memory_restart": "",
+      "env": {
+        "NOTION_TOKEN": "your api token",
+        "NOTION_DATABASE_ID": "your database id",
+        "NOTION_PAGE": "notion page"
+      }
+    }
+  ]
+}
+```
+
+`pm2 start dev.pm2.config.json`
