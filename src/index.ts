@@ -50,7 +50,7 @@ server.on('message', async (msg) => {
 
     try {
       await msg.reply('AlarmTest', '테스트1');
-      msg.reply(config.notionPage, '테스트1');
+      msg.reply(notionService.notionPage, '테스트1');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -82,7 +82,7 @@ server.on('message', async (msg) => {
 
       if (result.length > 0) {
         msg.reply('😇삼천원!', '취업뽀개기');
-        msg.reply('카카오뱅크: 3333-25-2512313', '취업뽀개기');
+        msg.reply('3333252512314 카카오뱅크', '취업뽀개기');
         msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
         msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -162,7 +162,7 @@ server.on('message', async (msg) => {
             (currentTime.getHours() == 14 && currentTime.getMinutes() >= 1)
           ) {
             msg.reply('입금하셨나요😝?');
-            msg.reply('카카오뱅크: 3333-25-2512313');
+            msg.reply('3333252512314 카카오뱅크');
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
