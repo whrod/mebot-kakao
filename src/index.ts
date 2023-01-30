@@ -44,19 +44,19 @@ server.on('message', async (msg) => {
     }
   }
 
-  // 세션테스트
-  // if (msg.room === 'KCbot' && cmd === 'sessionTest') {
-  //   const timestamp = Date.now();
+  //세션테스트
+  if (msg.room === 'KCbot' && cmd === 'session') {
+    const timestamp = Date.now();
 
-  //   try {
-  //     await msg.reply('test!', '취업뽀개기');
-  //     msg.reply(config.notionPage, '취업뽀개기');
-  //     msg.reply(`${Date.now() - timestamp}ms`);
-  //   } catch (err) {
-  //     console.error(err);
-  //     msg.reply(`${err}`);
-  //   }
-  // }
+    try {
+      await msg.reply('AlarmTest', '테스트1');
+      msg.reply(config.notionPage, '테스트1');
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  }
 
   //오픈톡방 09:00 알람에 따른 응답 메세지
   //TODO: 개발 관련 기사 크롤링해서 공유하기
