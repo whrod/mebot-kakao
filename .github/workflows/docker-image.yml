@@ -72,3 +72,15 @@ jobs:
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
           docker run -d -p 3000:3000/udp --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
+      - name: Set up Logrotate
+        run: |
+          echo "/var/lib/docker/containers/*/*.log {
+            rotate 5
+            daily
+            size 5mb
+            missingok
+          }" > /etc/logrotate.d/docker-cicd
+
+      - name: Configure logrotate cron job
+        run: |
+          crontab -l | { cat; echo "0 0 * * * logrotate -f /etc/logrotate.conf"; } | crontab -
