@@ -38,7 +38,7 @@ const getListTodoWriters = async () => {
       const created_hour = created_time.getHours();
       const created_day = () => {
         if (new Date().getDate() === created_time.getDate()) {
-          return undefined;
+          return;
         }
         if (new Date().getDate != created_time.getDate()) {
           return created_time.getDate() + '일';

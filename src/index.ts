@@ -60,38 +60,42 @@ server.on('message', async (msg) => {
   //오픈톡방 09:00 알람에 따른 응답 메세지
   //TODO: 개발 관련 기사 크롤링해서 공유하기
   if (msg.room === 'KCbot' && cmd === 'morning9:00') {
-    const timestamp = Date.now();
+    if (new Date().getDay() != 0 || new Date().getDay() != 6) {
+      const timestamp = Date.now();
 
-    try {
-      await msg.reply('굿모닝🙌 투두리스트 작성해주세요!', '취업뽀개기');
-      msg.reply(notionService.notionPage, '취업뽀개기');
-      msg.reply(`${Date.now() - timestamp}ms`);
-    } catch (err) {
-      console.error(err);
-      msg.reply(`${err}`);
+      try {
+        await msg.reply('굿모닝🙌 투두리스트 작성해주세요!', '취업뽀개기');
+        msg.reply(notionService.notionPage, '취업뽀개기');
+        msg.reply(`${Date.now() - timestamp}ms`);
+      } catch (err) {
+        console.error(err);
+        msg.reply(`${err}`);
+      }
     }
   }
 
   //오픈톡방 14:01 알람에 따른 응답 메세지
   if (msg.room === 'KCbot' && cmd === 'afternoon14:01') {
-    const timestamp = Date.now();
+    if (new Date().getDay() != 0 || new Date().getDay() != 6) {
+      const timestamp = Date.now();
 
-    try {
-      let result = await notionService.getTodayPenaltyList();
+      try {
+        let result = await notionService.getTodayPenaltyList();
 
-      if (result.length > 0) {
-        msg.reply('😇삼천원!', '취업뽀개기');
-        msg.reply('3333252512314 카카오뱅크', '취업뽀개기');
-        msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
-        msg.reply(`${Date.now() - timestamp}ms`);
+        if (result.length > 0) {
+          msg.reply('😇삼천원!', '취업뽀개기');
+          msg.reply('3333252512314 카카오뱅크', '취업뽀개기');
+          msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
+          msg.reply(`${Date.now() - timestamp}ms`);
+        }
+        if (result.length === 0) {
+          msg.reply('😌금일 벌금자 없음', '취업뽀개기'); // i18n
+          msg.reply(`${Date.now() - timestamp}ms`);
+        }
+      } catch (err) {
+        console.error(err);
+        msg.reply(`${err}`);
       }
-      if (result.length === 0) {
-        msg.reply('😌금일 벌금자 없음', '취업뽀개기'); // i18n
-        msg.reply(`${Date.now() - timestamp}ms`);
-      }
-    } catch (err) {
-      console.error(err);
-      msg.reply(`${err}`);
     }
   }
 
