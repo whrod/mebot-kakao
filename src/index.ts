@@ -24,8 +24,7 @@ server.usePlugin(LoggerPlugin);
 //FIXME: 카카오링크 사용시
 // server.usePlugin(KakaoLinkPlugin, config);
 
-//FIXME: 응답지연됐을때 promise rejected 관련 에러 핸들링
-//       긴 메세지 JSON.parse 관련 에러 핸들링
+//FIXME: 응답지연됐을때 에러핸들링
 server.on('message', async (msg) => {
   if (!msg.content.startsWith(prefix)) return;
   const args = msg.content.split(' ');
@@ -64,7 +63,7 @@ server.on('message', async (msg) => {
     const timestamp = Date.now();
 
     try {
-      await msg.reply('굿모닝🤪 투두리스트 작성해주세요!', '취업뽀개기');
+      await msg.reply('굿모닝🙌 투두리스트 작성해주세요!', '취업뽀개기');
       msg.reply(notionService.notionPage, '취업뽀개기');
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {

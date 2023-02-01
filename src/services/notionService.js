@@ -6,7 +6,7 @@ const notion = new Client({
 });
 const database_id = process.env.NOTION_DATABASE_ID;
 const notionPage = process.env.NOTION_PAGE;
-const { getTodayInNotionFormat } = require('../utils/dateFormat');
+const today = new Date().toISOString().slice(0, 10);
 
 //팀멤버
 const getTeamMembers = async () => {
@@ -14,14 +14,13 @@ const getTeamMembers = async () => {
     database_id: database_id,
   });
 
-  let teamMembers = response.properties['태그'].multi_select.options.map(
+  const teamMembers = response.properties['팀원'].multi_select.options.map(
     (list) => list.name
   );
   return teamMembers;
 };
 
 //금일 멤버들의 투두리스트의 리스트
-//TODO:투두리스트 작성시간이 오늘이 아닐때 처리
 const getListTodoWriters = async () => {
   const payload = {
     path: `databases/${database_id}/query`,
@@ -30,21 +29,32 @@ const getListTodoWriters = async () => {
 
   const { results } = await notion.request(payload);
 
-  const today = getTodayInNotionFormat();
-
   const listOfTodayTodoWriters = results
     .filter((data) => today === data.properties['날짜'].date.start)
     .map((data) => {
       const name = data.properties['이름'].title[0].text.content;
       const link = data.url;
-      const created_time = new Date(Date.parse(data.created_time)).getHours();
-      return `${name}(${created_time}시): ${link}`;
+      const created_time = new Date(Date.parse(data.created_time));
+      const created_hour = created_time.getHours();
+      const created_day = () => {
+        if (new Date().getDate() === created_time.getDate()) {
+          return undefined;
+        }
+        if (new Date().getDate != created_time.getDate()) {
+          return created_time.getDate() + '일';
+        }
+      };
+      const timeString = created_day()
+        ? `${created_day()},${created_hour}시`
+        : `${created_hour}시`;
+
+      return `${name}(${timeString}): ${link}`;
     });
 
   return listOfTodayTodoWriters;
 };
 
-//제 시간(14:00) 안에 쓴 사람 목록
+//제 시간(14:01) 안에 쓴 사람 목록
 const getWritersInTime = async () => {
   const payload = {
     path: `databases/${database_id}/query`,
@@ -53,19 +63,15 @@ const getWritersInTime = async () => {
 
   const { results } = await notion.request(payload);
 
-  const today = getTodayInNotionFormat();
-
   const writersInTime = results
-    .filter((data) => today === data.properties['날짜'].date.start) // 금일 날짜 조건
-    .map((data) => {
-      data.created_time = new Date(Date.parse(data.created_time));
-      return data;
-    }) //날짜 type string => date로(getHours()하기 위해, getHours()는 한국시간으로 안바꿔야함)
-    .filter(
-      (data) =>
-        data.created_time.getHours() < 14 ||
-        (data.created_time.getHours() == 14 && new Date().getMinutes() < 1)
-    ) //14:01까지 쓴사람
+    .filter((data) => {
+      return today === data.properties['날짜'].date.start;
+    }) // 금일 날짜 조건
+    .filter((data) => {
+      const createdTime = new Date(data.created_time);
+      const deadline = new Date(today + 'T14:01:00');
+      return createdTime < deadline;
+    }) //14:01까지 쓴사람
     .map((page) => page.properties['이름'].title[0].text.content); //이름만 다시 뽑은 배열
 
   return writersInTime;
@@ -86,6 +92,7 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
 // console.log('►NotionPage: ', notionPage);
 // console.log('►NotionDatabaseId: ', process.env.NOTION_DATABASE_ID);
 // console.log('►NotionToken: ', process.env.NOTION_TOKEN);
+
 // // ** Notion API 기능 출력 **
 // (async () => {
 //   const todoWriters = await getListTodoWriters();
