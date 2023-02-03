@@ -6,6 +6,7 @@ const notion = new Client({
 });
 const database_id = process.env.NOTION_DATABASE_ID;
 const notionPage = process.env.NOTION_PAGE;
+const { getKoreanDate } = require('../util/dateFormat');
 
 //팀멤버
 const getTeamMembers = async () => {
@@ -27,7 +28,7 @@ const getListTodoWriters = async () => {
   };
 
   const { results } = await notion.request(payload);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getKoreanDate();
 
   const listOfTodayTodoWriters = results
     .filter((data) => today === data.properties['날짜'].date.start)
@@ -62,7 +63,7 @@ const getWritersInTime = async () => {
   };
 
   const { results } = await notion.request(payload);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getKoreanDate();
 
   const writersInTime = results
     .filter((data) => {
