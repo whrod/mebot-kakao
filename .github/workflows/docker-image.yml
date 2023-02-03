@@ -83,4 +83,5 @@ jobs:
 
       - name: Configure logrotate cron job
         run: |
-          crontab -l | { cat; echo "0 0 * * * logrotate -f /etc/logrotate.conf"; } | crontab -
+          crontab -l | sed '/logrotate/d' | crontab -
+          crontab -l | { cat; echo "0 4 * * * TZ=Asia/Seoul logrotate -f /etc/logrotate.conf"; } | crontab -
