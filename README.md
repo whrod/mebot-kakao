@@ -2,8 +2,7 @@
 
 ## Demo Video
 
-- https://youtu.be/tsswjg-nQ9s
-  [![KCbot Demo Video](http://img.youtube.com/vi/tsswjg-nQ9s/0.jpg)](https://youtu.be/tsswjg-nQ9s?t=0s)
+[![KCbot Demo Video](http://img.youtube.com/vi/tsswjg-nQ9s/0.jpg)](https://youtu.be/tsswjg-nQ9s?t=0s)
 
 ## API 활용 기능
 
