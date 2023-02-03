@@ -147,7 +147,6 @@ server.on('message', async (msg) => {
         case 0:
           msg.reply('😌금일 벌금자 없음');
           msg.reply(`${Date.now() - timestamp}ms`);
-          console.log('case0');
           break;
 
         default:
