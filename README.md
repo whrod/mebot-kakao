@@ -3,17 +3,21 @@
 ## Demo Video
 
 - https://youtu.be/tsswjg-nQ9s
+  [![KCbot Demo Video](http://img.youtube.com/vi/tsswjg-nQ9s/0.jpg)](https://youtu.be/tsswjg-nQ9s?t=0s)
 
 ## API 활용 기능
 
 - [x] 스터디 그룹 멤버 확인  
-       command : >팀원
+       command : >'팀원', 'ㅌㅇ', 'ㅌㅁㅂ', 'ㅁㅂ', '멤버', '팀멤버'
 
 - [x] 오늘 스터디 투두 리스트 확인  
-       command : >투두리스트
+       command : >'투두리스트', '오늘투두', '투두', 'ㅌㄷ', 'ㅌㄷㄹㅅㅌ'
 
 - [x] 오늘 스터디 투두 리스트 미작성자 확인  
-       command : >투두벌금
+       command : >'투두벌금', '투벌', 'ㅌㅂ', 'ㅌㄷㅂㄱ'
+
+- [x] 노션 매뉴얼  
+       command : >'설명서', 'ㅅㅁㅅ', 'manual', '노션설명서', '카톡봇', '카봇', 'KC', '케이씨', 'ㅁㄴㅇ'
 
 - [x] 투두리스트 알람 기능
   - [x] 오픈톡방 커맨드 응답 활용 구현
@@ -57,9 +61,9 @@
 
 ## 기타(TODO:)
 
-- [ ] 리팩토링
-  - [ ] 함수 mapping
-  - [ ] 상수 관리
+- [ ] 함수 mapping
+- [x] 상수 관리
+- [x] Controller layer 분리
 - [ ] express router 합치기
 - [ ] 테스트코드
 
