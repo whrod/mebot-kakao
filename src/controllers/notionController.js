@@ -1,4 +1,12 @@
 const notionService = require('../services/notionService');
+const {
+  notionCommands,
+  sendMsgRooms,
+  receiveMsgRooms,
+  replyMessages,
+  limitTimes,
+  notionManual,
+} = require('../constants/notionConstants');
 
 const onNotionMessage = async (msg, cmd) => {
   const prefix = '>';
@@ -9,24 +17,44 @@ const onNotionMessage = async (msg, cmd) => {
   cmd = args.shift()?.slice(prefix.length);
 
   //pingTest
-  if (cmd === 'ping') {
+  //>ping
+  if (cmd === notionCommands.pingTest) {
     const timestamp = Date.now();
 
     try {
-      await msg.reply('Pong!');
+      await msg.reply(replyMessages.msgPong);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
       msg.reply(`${err}`);
     }
   }
-  //세션테스트
-  if (msg.room === 'KCbot' && cmd === 'session') {
+
+  //manual
+  //>manual
+  if (notionCommands.manual.includes(cmd)) {
     const timestamp = Date.now();
 
     try {
-      await msg.reply('AlarmTest', '테스트1');
-      msg.reply(notionService.notionPage, '테스트1');
+      await msg.reply(notionManual);
+      msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  }
+
+  //세션테스트
+  //>session
+  if (
+    msg.room === sendMsgRooms.testSendRoom &&
+    cmd === notionCommands.sessionTest
+  ) {
+    const timestamp = Date.now();
+
+    try {
+      await msg.reply(replyMessages.msgAlarmTest, receiveMsgRooms.testRecRoom);
+      msg.reply(notionService.notionPage, receiveMsgRooms.testRecRoom);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -35,14 +63,21 @@ const onNotionMessage = async (msg, cmd) => {
   }
 
   //오픈톡방 09:00 알람에 따른 응답 메세지
+  //>morning9:00
   //TODO: 개발 관련 기사 크롤링해서 공유하기
-  if (msg.room === 'KCbot' && cmd === 'morning9:00') {
-    if (new Date().getDay() != 0 || new Date().getDay() != 6) {
+  if (
+    msg.room === sendMsgRooms.alarmSendRoom &&
+    cmd === notionCommands.cmdAlarmTodoMorning
+  ) {
+    if (new Date().getDay() != 0 && new Date().getDay() != 6) {
       const timestamp = Date.now();
 
       try {
-        await msg.reply('굿모닝🙌 투두리스트 작성해주세요!', '취업뽀개기');
-        msg.reply(notionService.notionPage, '취업뽀개기');
+        await msg.reply(
+          replyMessages.msgAlarmTodoMorning,
+          receiveMsgRooms.studyRecRoom
+        );
+        msg.reply(notionService.notionPage, receiveMsgRooms.studyRecRoom);
         msg.reply(`${Date.now() - timestamp}ms`);
       } catch (err) {
         console.error(err);
@@ -52,21 +87,37 @@ const onNotionMessage = async (msg, cmd) => {
   }
 
   //오픈톡방 14:01 알람에 따른 응답 메세지
-  if (msg.room === 'KCbot' && cmd === 'afternoon14:01') {
-    if (new Date().getDay() != 0 || new Date().getDay() != 6) {
+  //>afternoon14:01
+  if (
+    msg.room === sendMsgRooms.alarmSendRoom &&
+    cmd === notionCommands.cmdAlarmTodoPenalty
+  ) {
+    if (new Date().getDay() != 0 && new Date().getDay() != 6) {
       const timestamp = Date.now();
 
       try {
         let result = await notionService.getTodayPenaltyList();
 
         if (result.length > 0) {
-          msg.reply('😇삼천원!', '취업뽀개기');
-          msg.reply('3333252512314 카카오뱅크', '취업뽀개기');
-          msg.reply(result.toString().replaceAll(',', '\n'), '취업뽀개기');
+          msg.reply(
+            replyMessages.msgAlarmTodoPenalty,
+            receiveMsgRooms.studyRecRoom
+          );
+          msg.reply(
+            replyMessages.msgPenaltyAccount,
+            receiveMsgRooms.studyRecRoom
+          );
+          msg.reply(
+            result.toString().replaceAll(',', '\n'),
+            receiveMsgRooms.studyRecRoom
+          );
           msg.reply(`${Date.now() - timestamp}ms`);
         }
         if (result.length === 0) {
-          msg.reply('😌금일 벌금자 없음', '취업뽀개기'); // i18n
+          msg.reply(
+            replyMessages.msgNoTodoPenalty,
+            receiveMsgRooms.studyRecRoom
+          );
           msg.reply(`${Date.now() - timestamp}ms`);
         }
       } catch (err) {
@@ -77,7 +128,8 @@ const onNotionMessage = async (msg, cmd) => {
   }
 
   //팀원 리스트
-  if (cmd === '팀원') {
+  //>팀원
+  if (notionCommands.teamMember.includes(cmd)) {
     const timestamp = Date.now();
 
     try {
@@ -91,14 +143,15 @@ const onNotionMessage = async (msg, cmd) => {
   }
 
   //팀원들 투두리스트(이름(작성시간):url)
-  if (cmd === '투두리스트') {
+  //>투두리스트
+  if (notionCommands.todoList.includes(cmd)) {
     const timestamp = Date.now();
     try {
       let result = await notionService.getListTodoWriters();
 
       switch (result.length) {
         case 0:
-          msg.reply('아직 아무도 안씀!!😤');
+          msg.reply(replyMessages.msgNoTodoList);
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
@@ -112,8 +165,9 @@ const onNotionMessage = async (msg, cmd) => {
     }
   }
 
-  //제 시간(14:00)에 투두 작성하지 않은 사람 리스트
-  if (cmd === '투두벌금') {
+  //제 시간(14:01)까지 투두 작성하지 않은 사람 리스트
+  //>투두벌금
+  if (notionCommands.todoPenalty.includes(cmd)) {
     const timestamp = Date.now();
     const currentTime = new Date();
 
@@ -122,26 +176,28 @@ const onNotionMessage = async (msg, cmd) => {
 
       switch (result.length) {
         case 0:
-          msg.reply('😌금일 벌금자 없음');
+          msg.reply(replyMessages.msgNoTodoPenalty);
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
         default:
           if (
-            currentTime.getHours() < 14 ||
-            (currentTime.getHours() == 14 && currentTime.getMinutes() < 1)
+            currentTime.getHours() < limitTimes.todoLimitHour ||
+            (currentTime.getHours() == limitTimes.todoLimitHour &&
+              currentTime.getMinutes() < limitTimes.todoLimitMinute)
           ) {
-            msg.reply('아직 14:00 안됨 얼렁 쓰세여🤟');
+            msg.reply(replyMessages.msgNoLimitTimeTodo);
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
 
           if (
-            currentTime.getHours() > 14 ||
-            (currentTime.getHours() == 14 && currentTime.getMinutes() >= 1)
+            currentTime.getHours() > limitTimes.todoLimitHour ||
+            (currentTime.getHours() == limitTimes.todoLimitHour &&
+              currentTime.getMinutes() >= limitTimes.todoLimitMinute)
           ) {
-            msg.reply('입금하셨나요😝?');
-            msg.reply('3333252512314 카카오뱅크');
+            msg.reply(replyMessages.msgLimitTimeOverTodo);
+            msg.reply(replyMessages.msgPenaltyAccount);
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
