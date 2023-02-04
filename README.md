@@ -6,6 +6,16 @@
 
 ## API 활용 기능
 
+### 1.카톡 메세지 알람 및 2.메세지(command)에 대한 응답
+
+1. 09:00 투두리스트 알람, 14:01 벌금리스트 알람
+
+- [x] 알람 기능
+  - [x] 오픈톡방 커맨드 응답 활용 구현
+  - [ ] Socket(dgram) 활용 구현
+
+2. \>팀원, >투두리스트, >투두벌금, >설명서
+
 - [x] 스터디 그룹 멤버 확인  
        command : >'팀원', 'ㅌㅇ', 'ㅌㅁㅂ', 'ㅁㅂ', '멤버', '팀멤버'
 
@@ -18,10 +28,6 @@
 - [x] 노션 매뉴얼  
        command : >'설명서', 'ㅅㅁㅅ', 'manual', '노션설명서', '카톡봇', '카봇', 'KC', '케이씨', 'ㅁㄴㅇ'
 
-- [x] 투두리스트 알람 기능
-  - [x] 오픈톡방 커맨드 응답 활용 구현
-  - [ ] Socket(dgram) 활용 구현
-
 ## 배포
 
 - [x] 배포(Github Action, Docker, EC2 CI/CD 구축)
@@ -30,10 +36,10 @@
 ## usage
 
 `yarn install`<br>
-`npm install`<br>
-`yarn start`
+`yarn pm2 install typescript`<br>
+`yarn start` or `yarn pm2 start dev.pm2.config.json`
 
-**로컬에서 PM2 운영시 env 추가 필요**
+**로컬에서 PM2 운영시 pm2.env 추가 필요**
 
 ```JSON
 //ex: dev.pm2.config.json
@@ -55,8 +61,6 @@
   ]
 }
 ```
-
-`pm2 start dev.pm2.config.json`
 
 ## 기타(TODO:)
 
