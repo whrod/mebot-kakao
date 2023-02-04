@@ -15,11 +15,8 @@ COPY package.json .
 RUN rm yarn.lock || true
 RUN rm package-lock.json || true
 RUN yarn install
-RUN yarn add nodemon
-RUN npm install
-RUN npm i pm2 -g
-RUN npm i ts-node -g
+RUN yarn pm2 install typescript
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 COPY . .
 EXPOSE 3000/udp
-CMD ["pm2-runtime","pm2.config.json"]
+CMD ["yarn","pm2-runtime","pm2.config.json"]
