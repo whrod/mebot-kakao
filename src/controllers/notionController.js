@@ -54,7 +54,7 @@ const onNotionMessage = async (msg, cmd) => {
 
     try {
       await msg.reply(replyMessages.msgAlarmTest, receiveMsgRooms.testRecRoom);
-      msg.reply(notionService.notionPage, receiveMsgRooms.testRecRoom);
+      msg.reply(notionService.notionPageUrl, receiveMsgRooms.testRecRoom);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -77,7 +77,7 @@ const onNotionMessage = async (msg, cmd) => {
           replyMessages.msgAlarmTodoMorning,
           receiveMsgRooms.studyRecRoom
         );
-        msg.reply(notionService.notionPage, receiveMsgRooms.studyRecRoom);
+        msg.reply(notionService.notionPageUrl, receiveMsgRooms.studyRecRoom);
         msg.reply(`${Date.now() - timestamp}ms`);
       } catch (err) {
         console.error(err);
@@ -202,6 +202,20 @@ const onNotionMessage = async (msg, cmd) => {
             msg.reply(`${Date.now() - timestamp}ms`);
           }
       }
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  }
+
+  //면접 질문 리스트 url
+  if (notionCommands.interviewList.includes(cmd)) {
+    const timestamp = Date.now();
+
+    try {
+      await msg.reply(replyMessages.msgInterviewList);
+      msg.reply(notionService.interviewPageUrl);
+      msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
       msg.reply(`${err}`);

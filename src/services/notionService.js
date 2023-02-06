@@ -1,20 +1,47 @@
 require('dotenv').config();
 
 const { Client } = require('@notionhq/client');
+
+const {
+  NOTION_TOKEN: notionToken,
+  NOTION_PAGE_URL: notionPage,
+  NOTION_DOMAIN: notionDomain,
+  NOTION_TODO_DATABASE_ID: todoDatabaseId,
+  NOTION_BLOG_DATABASE_ID: blogDatabaseId,
+  NOTION_INTERVIEW_DATABASE_ID: interviewDatabaseId,
+  NOTION_MEMBER_SNS_DATABASE_ID: memberSnsDatabaseId,
+  NOTION_PORTFOLIO_DATABASE_ID: portfolioDatabaseId,
+  NOTION_REF_SITES_DATABASE_ID: refSitesDatabaseId,
+  NOTION_PROJECT_IDEAS_DATABASE_ID: projectsDatabaseId,
+  NOTION_MEETING_SCHEDULE_DATABASE_ID: meetingScheduleDatabaseId,
+} = process.env;
+
 const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
+  auth: notionToken,
 });
-const database_id = process.env.NOTION_DATABASE_ID;
-const notionPage = process.env.NOTION_PAGE;
+
 const { getKoreanDate } = require('../util/dateFormat');
+
+const getDbObjects = async (databaseId) => {
+  const response = await notion.databases.retrieve({
+    database_id: databaseId,
+  });
+  return response;
+};
+
+const getPayload = (databaseId) => ({
+  path: `databases/${databaseId}/query`,
+  method: 'POST',
+});
+
+const notionPageUrl = notionPage;
+const interviewPageUrl = notionDomain + interviewDatabaseId;
 
 //팀멤버
 const getTeamMembers = async () => {
-  const response = await notion.databases.retrieve({
-    database_id: database_id,
-  });
+  const todoDBObjects = await getDbObjects(todoDatabaseId);
 
-  const teamMembers = response.properties['팀원'].multi_select.options.map(
+  const teamMembers = todoDBObjects.properties['팀원'].multi_select.options.map(
     (list) => list.name
   );
   return teamMembers;
@@ -22,19 +49,17 @@ const getTeamMembers = async () => {
 
 //금일 멤버들의 투두리스트의 리스트
 const getListTodoWriters = async () => {
-  const payload = {
-    path: `databases/${database_id}/query`,
-    method: 'POST',
-  };
+  const todoPayload = getPayload(todoDatabaseId);
 
-  const { results } = await notion.request(payload);
+  const { results } = await notion.request(todoPayload);
+
   const today = getKoreanDate();
 
   const listOfTodayTodoWriters = results
     .filter((data) => today === data.properties['날짜'].date.start)
     .map((data) => {
       const name = data.properties['이름'].title[0].text.content;
-      const link = data.url;
+      const link = notionDomain + data.url.slice(22);
       const created_time = new Date(Date.parse(data.created_time));
       const created_hour = created_time.getHours();
       const created_day = () => {
@@ -57,12 +82,9 @@ const getListTodoWriters = async () => {
 
 //제 시간(14:01) 안에 쓴 사람 목록
 const getWritersInTime = async () => {
-  const payload = {
-    path: `databases/${database_id}/query`,
-    method: 'POST',
-  };
+  const todoPayload = getPayload(todoDatabaseId);
 
-  const { results } = await notion.request(payload);
+  const { results } = await notion.request(todoPayload);
   const today = getKoreanDate();
 
   const writersInTime = results
@@ -91,9 +113,10 @@ const getTodayPenaltyList = async (writersInTime, teamMembers) => {
 };
 
 // // ** ENV 연결 확인 출력 **
-// console.log('►NotionPage: ', notionPage);
-// console.log('►NotionDatabaseId: ', process.env.NOTION_DATABASE_ID);
-// console.log('►NotionToken: ', process.env.NOTION_TOKEN);
+// console.log('►NotionPage: ', notionPageUrl);
+// console.log('►InterviewPageUrl: ', interviewPageUrl);
+// console.log('►TodoDatabaseID', todoDatabaseId);
+// console.log('►NotionToken: ', notionToken);
 
 // // ** Notion API 기능 출력 **
 // (async () => {
@@ -122,5 +145,6 @@ module.exports = {
   getListTodoWriters,
   getTodayPenaltyList,
   getWritersInTime,
-  notionPage,
+  notionPageUrl,
+  interviewPageUrl,
 };

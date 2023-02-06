@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "nodemon --watch 'src/**/' --exec 'ts-node src/index.ts'",
     "dev": "nodemon --exec ts-node src/index.ts",
     "test": "jest"
   },

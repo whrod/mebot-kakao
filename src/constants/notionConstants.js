@@ -3,6 +3,7 @@ const notionCommands = {
   todoList: ['투두리스트', '오늘투두', '투두', 'ㅌㄷ', 'ㅌㄷㄹㅅㅌ'],
   todoPenalty: ['투두벌금', '투벌', 'ㅌㅂ', 'ㅌㄷㅂㄱ'],
   teamMember: ['팀원', 'ㅌㅇ', 'ㅌㅁㅂ', 'ㅁㅂ', '멤버', '팀멤버'],
+  interviewList: ['면접질문', '면질', '면접', 'ㅁㅈ'],
   sessionTest: 'session',
   cmdAlarmTodoMorning: 'morning9:00',
   cmdAlarmTodoPenalty: 'afternoon14:01',
@@ -39,6 +40,7 @@ const replyMessages = {
   msgLimitTimeOverTodo: '입금하셨나요😝?',
   msgPenaltyAccount: '3333252512314 카카오뱅크',
   msgNoTodoList: '아직 아무도 안씀!!😤',
+  msgInterviewList: '►면접질문DB',
 };
 
 const limitTimes = {
@@ -57,7 +59,7 @@ const notionManual = `KC bot Notion manual
 ex)>설명서, >투두, >투두벌금, >팀원
 
 노션 설명서: 
-'설명서', 'ㅅㅁㅅ', 'manual', '노션설명서', '카톡봇', '카봇', 'KC', '케이씨', 'ㅁㄴㅇ'
+'노션', '설명서', 케이씨', ''KC', 'manual', 'ㅁㄴㅇ', 'ㅅㅁㅅ'
 
 금일 투두리스트: 
 '투두리스트', '오늘투두', '투두', 'ㅌㄷ', 'ㅌㄷㄹㅅㅌ'
@@ -66,7 +68,10 @@ ex)>설명서, >투두, >투두벌금, >팀원
 '투두벌금', '투벌', 'ㅌㅂ', 'ㅌㄷㅂㄱ'
 
 팀원 리스트:
-'팀원', 'ㅌㅇ', 'ㅌㅁㅂ', 'ㅁㅂ', '멤버', '팀멤버'`;
+'팀원', '멤버', '팀멤버', 'ㅌㅇ', 'ㅌㅁㅂ', 'ㅁㅂ'
+
+면접 질문 리스트:
+'면접', '면접질문', '면질', 'ㅁㅈ'`;
 
 module.exports = {
   notionCommands,
