@@ -96,7 +96,7 @@ const onNotionMessage = async (msg, cmd) => {
       const timestamp = Date.now();
 
       try {
-        let result = await notionService.getTodayPenaltyList();
+        let result = await notionService.getTodoPenaltyList();
 
         if (result.length > 0) {
           msg.reply(
@@ -147,7 +147,7 @@ const onNotionMessage = async (msg, cmd) => {
   if (notionCommands.todoList.includes(cmd)) {
     const timestamp = Date.now();
     try {
-      let result = await notionService.getListTodoWriters();
+      let result = await notionService.getTodayTodoLists();
 
       switch (result.length) {
         case 0:
@@ -156,6 +156,7 @@ const onNotionMessage = async (msg, cmd) => {
           break;
 
         default:
+          msg.reply(replyMessages.msgCallTodoList);
           msg.reply(result.toString().replaceAll(',', '\n'));
           msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -172,7 +173,7 @@ const onNotionMessage = async (msg, cmd) => {
     const currentTime = new Date();
 
     try {
-      let result = await notionService.getTodayPenaltyList();
+      let result = await notionService.getTodoPenaltyList();
 
       switch (result.length) {
         case 0:
@@ -216,6 +217,30 @@ const onNotionMessage = async (msg, cmd) => {
       await msg.reply(replyMessages.msgInterviewList);
       msg.reply(notionService.interviewPageUrl);
       msg.reply(`${Date.now() - timestamp}ms`);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  }
+
+  //팀원들 블로그리스트(이름(제목):url)
+  //>블로그리스트
+  if (notionCommands.blogList.includes(cmd)) {
+    const timestamp = Date.now();
+    try {
+      let result = await notionService.getThisWeekBlogList();
+
+      switch (result.length) {
+        case 0:
+          msg.reply(replyMessages.msgNoThisWeekBlog);
+          msg.reply(`${Date.now() - timestamp}ms`);
+          break;
+
+        default:
+          msg.reply(replyMessages.msgCallBlogList);
+          msg.reply(result.toString().replaceAll(',', '\n'));
+          msg.reply(`${Date.now() - timestamp}ms`);
+      }
     } catch (err) {
       console.error(err);
       msg.reply(`${err}`);

@@ -11,33 +11,33 @@ describe('receiving and processing data through the notion API', () => {
   });
 
   test('getListTodoWriters should return list of todo writers. An empty array may be returned if no one created it.', async () => {
-    const listOfTodoWriters = await notionService.getListTodoWriters();
-    expect(listOfTodoWriters).toBeDefined();
-    expect(listOfTodoWriters).toBeInstanceOf(Array);
-    expect(listOfTodoWriters.length).toBeGreaterThanOrEqual(0);
-    listOfTodoWriters.forEach((todoWriter) => {
-      expect(todoWriter).toMatch(
+    const todayTodoLists = await notionService.getTodayTodoLists();
+    expect(todayTodoLists).toBeDefined();
+    expect(todayTodoLists).toBeInstanceOf(Array);
+    expect(todayTodoLists.length).toBeGreaterThanOrEqual(0);
+    todayTodoLists.forEach((todoList) => {
+      expect(todoList).toMatch(
         /[\w\s\가-힣]*\(\d+(시|일\,\d+시)\): https:\/\/\S*/
       );
     });
   });
 
   test('getWritersInTime should return list of people who wrote a to-do list on time. An empty array may be returned if no one created it.', async () => {
-    const writersInTime = await notionService.getWritersInTime();
-    expect(writersInTime).toBeDefined();
-    expect(writersInTime).toBeInstanceOf(Array);
-    expect(writersInTime.length).toBeGreaterThanOrEqual(0);
-    if (writersInTime.length > 0) {
+    const todoWritersInTime = await notionService.getTodoWritersInTime();
+    expect(todoWritersInTime).toBeDefined();
+    expect(todoWritersInTime).toBeInstanceOf(Array);
+    expect(todoWritersInTime.length).toBeGreaterThanOrEqual(0);
+    if (todoWritersInTime.length > 0) {
       const memberName = [expect.stringMatching(/^[\w\s\가-힣]*/)];
-      expect(writersInTime).toEqual(expect.arrayContaining(memberName));
+      expect(todoWritersInTime).toEqual(expect.arrayContaining(memberName));
     }
   });
 
   test('getTodayPenaltyList should return List of people who did not write a to-do list in time. If all has been done, an empty array may be returned.', async () => {
-    const writersInTime = ['test1', 'test2'];
+    const todoWritersInTime = ['test1', 'test2'];
     const teamMembers = ['test1', 'test2', 'test3'];
-    const todoPenaltyList = await notionService.getTodayPenaltyList(
-      writersInTime,
+    const todoPenaltyList = await notionService.getTodoPenaltyList(
+      todoWritersInTime,
       teamMembers
     );
 

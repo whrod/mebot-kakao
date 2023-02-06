@@ -8,6 +8,7 @@ const notionCommands = {
   cmdAlarmTodoMorning: 'morning9:00',
   cmdAlarmTodoPenalty: 'afternoon14:01',
   manual: ['노션', '설명서', '케이씨', 'KC', 'manual', 'ㅁㄴㅇ', 'ㅅㅁㅅ'],
+  blogList: ['블로그', '블로그리스트', '블리', 'ㅂㄹㄱㄹㅅㅌ', 'ㅂㄹㄱ'],
 };
 
 const sendMsgRooms = {
@@ -24,13 +25,17 @@ const replyMessages = {
   msgPong: 'pong',
   msgAlarmTest: 'AlarmTest',
   msgAlarmTodoMorning: '굿모닝🙌 투두리스트 작성해주세요!',
+  msgCallTodoList: '📢오늘 투두리스트📢',
   msgAlarmTodoPenalty: '😇삼천원!',
   msgNoTodoPenalty: '😌금일 벌금자 없음',
   msgNoLimitTimeTodo: '아직 14:00 안됨 얼렁 쓰세여🤟',
   msgLimitTimeOverTodo: '입금하셨나요😝?',
   msgPenaltyAccount: '3333252512314 카카오뱅크',
-  msgNoTodoList: '아직 아무도 안씀!!😤',
+  msgNoTodoList: '투두 아직 아무도 안씀!!😤',
   msgInterviewList: '💾면접질문DB💾',
+  msgCallBlogList: '🖼️이번주 블로그리스트🖼️',
+  msgNoThisWeekBlog: '블로그 아직 아무도 안씀!!😤',
+  msgCallBlogPenaltyLIst: '아직 안쓰신분: ',
 };
 
 const limitTimes = {
