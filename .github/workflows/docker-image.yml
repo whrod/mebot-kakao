@@ -51,8 +51,16 @@ jobs:
         with:
           build-args: |
             NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
-            NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID}}
-            NOTION_PAGE=${{ secrets.NOTION_PAGE}}
+            NOTION_PAGE_URL=${{ secrets.NOTION_PAGE_URL}}
+            NOTION_DOMAIN=${{ secrets.NOTION_DOMAIN}}
+            NOTION_TODO_DATABASE_ID=${{ secrets.NOTION_TODO_DATABASE_ID}}
+            NOTION_BLOG_DATABASE_ID=${{ secrets.NOTION_BLOG_DATABASE_ID}}
+            NOTION_INTERVIEW_DATABASE_ID=${{ secrets.NOTION_INTERVIEW_DATABASE_ID}}
+            NOTION_MEMBER_SNS_DATABASE_ID=${{ secrets.NOTION_MEMBER_SNS_DATABASE_ID}}
+            NOTION_PORTFOLIO_DATABASE_ID=${{ secrets.NOTION_PORTFOLIO_DATABASE_ID}}
+            NOTION_REF_SITES_DATABASE_ID=${{ secrets.NOTION_REF_SITES_DATABASE_ID}}
+            NOTION_PROJECT_IDEAS_DATABASE_ID=${{ secrets.NOTION_PROJECT_IDEAS_DATABASE_ID}}
+            NOTION_MEETING_SCHEDULE_DATABASE_ID=${{ secrets.NOTION_MEETING_SCHEDULE_DATABASE_ID}}
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
