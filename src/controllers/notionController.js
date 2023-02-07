@@ -36,7 +36,7 @@ const onNotionMessage = async (msg, cmd) => {
     const timestamp = Date.now();
 
     try {
-      await msg.reply(notionManual);
+      await msg.reply(notionManual.replaceAll(',', ' '));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -224,7 +224,7 @@ const onNotionMessage = async (msg, cmd) => {
   }
 
   //팀원들 블로그리스트(이름(제목):url)
-  //>블로그리스트
+  //>작성 블로그 리스트
   if (notionCommands.blogList.includes(cmd)) {
     const timestamp = Date.now();
     try {
@@ -241,6 +241,21 @@ const onNotionMessage = async (msg, cmd) => {
           msg.reply(result.toString().replaceAll(',', '\n'));
           msg.reply(`${Date.now() - timestamp}ms`);
       }
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  }
+
+  //팀원들 개인사이트(이름 / url)
+  //>이름
+  if (notionCommands.snsList.includes(cmd)) {
+    const timestamp = Date.now();
+    try {
+      let result = await notionService.getMemberSns(cmd);
+      msg.reply(cmd + replyMessages.msgCallSnsList);
+      msg.reply(result.toString().replaceAll(',', '\n'));
+      msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
       msg.reply(`${err}`);

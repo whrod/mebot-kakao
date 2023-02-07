@@ -1,20 +1,10 @@
-const convertDate = require('./dateFormat');
-
-const blogFilter = {
-  property: '날짜',
-  date: {
-    this_week: {},
-  },
-};
-
-const todoFilter = {
-  property: '날짜',
-  date: {
-    equals: convertDate.getKoreanDate(),
-  },
+const filter = (property, type, opt, optValue) => {
+  return {
+    property: property,
+    [type]: { [opt]: optValue },
+  };
 };
 
 module.exports = {
-  blogFilter,
-  todoFilter,
+  filter,
 };

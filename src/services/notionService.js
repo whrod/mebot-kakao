@@ -1,8 +1,8 @@
 require('dotenv').config();
 
 const { Client } = require('@notionhq/client');
-const convertDate = require('../util/dateFormat');
-const filter = require('../util/notionQueryFilter');
+const { getKoreanTodayDate } = require('../util/dateFormat');
+const { filter } = require('../util/notionQueryFilter');
 
 const {
   NOTION_TOKEN: notionToken,
@@ -53,7 +53,8 @@ const getTeamMembers = async () => {
 
 // 금일 멤버들의 투두리스트의 리스트
 const getTodayTodoLists = async () => {
-  const response = await notionDbQuery(todoDatabaseId, filter.todoFilter);
+  const todoFilter = filter('날짜', 'date', 'equals', getKoreanTodayDate());
+  const response = await notionDbQuery(todoDatabaseId, todoFilter);
 
   const todayTodoLists = response.results.map((data) => {
     const name = data.properties['이름'].title[0].text.content;
@@ -80,9 +81,10 @@ const getTodayTodoLists = async () => {
 
 //제 시간(14:01) 안에 쓴 사람 목록
 const getTodoWritersInTime = async () => {
-  const response = await notionDbQuery(todoDatabaseId, filter.todoFilter);
+  const todoFilter = filter('날짜', 'date', 'equals', getKoreanTodayDate());
+  const response = await notionDbQuery(todoDatabaseId, todoFilter);
 
-  const today = convertDate.getKoreanDate();
+  const today = getKoreanTodayDate();
 
   const todoWritersInTime = response.results
     .filter((data) => {
@@ -119,7 +121,8 @@ const getTodoPenaltyList = async (todoWritersInTime, teamMembers) => {
 //    - [ ] 시작 알람 : 단순 안내 내용 strings
 
 const getThisWeekBlogList = async () => {
-  const response = await notionDbQuery(blogDatabaseId, filter.blogFilter);
+  const blogFilter = filter('날짜', 'date', 'this_week', {});
+  const response = await notionDbQuery(blogDatabaseId, blogFilter);
 
   const thisWeekBlogList = response.results.map((data) => {
     const name = data.properties['팀원'].multi_select[0].name;
@@ -152,12 +155,24 @@ const getBlogPenaltyList = async (teamMembers) => {
   return blogPenaltyList;
 };
 
+const getMemberSns = async (cmd) => {
+  const snsFilter = filter('이름', 'multi_select', 'contains', cmd);
+  const response = await notionDbQuery(memberSnsDatabaseId, snsFilter);
+  const snsList = response.results.map((data) => {
+    const siteTag = data.properties['종류'].multi_select[0].name;
+    const snsUrl = data.properties.URL.url;
+
+    return `${siteTag}: ${snsUrl}`;
+  });
+
+  return snsList;
+};
+
 // // ** Notion API 기능 출력 **
 // (async () => {
-
-// const todayTodoLists = await getTodayTodoLists();
-// console.log('►TodoLists: ', todayTodoLists);
-// console.log('-------------------------\n');
+//   const todayTodoLists = await getTodayTodoLists();
+//   console.log('►TodoLists: ', todayTodoLists);
+//   console.log('-------------------------\n');
 
 // const todoWritersInTime = await getTodoWritersInTime();
 // console.log('►InTime: ', todoWritersInTime);
@@ -181,6 +196,10 @@ const getBlogPenaltyList = async (teamMembers) => {
 // const blogPenaltyList = await getBlogPenaltyList();
 // console.log('►BlogPenaltyList: ', blogPenaltyList);
 // console.log('-------------------------\n');
+
+// const memberSns = await getMemberSns();
+// console.log('►MemberSNS: ', memberSns);
+// console.log('-------------------------\n');
 // })();
 
 module.exports = {
@@ -190,6 +209,7 @@ module.exports = {
   getTodoWritersInTime,
   getThisWeekBlogList,
   getBlogPenaltyList,
+  getMemberSns,
   notionPageUrl,
   interviewPageUrl,
 };
