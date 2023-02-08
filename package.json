@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "",
   "scripts": {
-    "start": "nodemon --watch 'src/**/' --exec 'ts-node src/index.ts'",
+    "start": "nodemon --watch 'src/**/' --ext ts,js,json --exec 'ts-node src/index.ts'",
     "dev": "nodemon --exec ts-node src/index.ts",
     "test": "jest"
   },
@@ -15,6 +15,7 @@
     "@remote-kakao/core": "^1.0.7",
     "@remote-kakao/kakaolink-plugin": "^1.0.8",
     "dotenv": "^16.0.3",
+    "openai": "^3.1.0",
     "pm2": "^5.2.2",
     "ts-node": "^10.9.1",
     "uuid": "9.0.0"

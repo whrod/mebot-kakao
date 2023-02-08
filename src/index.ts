@@ -7,19 +7,36 @@
 import { Server } from '@remote-kakao/core';
 import LoggerPlugin from './plugins/logger';
 
-const { onNotionMessage } = require('./controllers/notionController');
+const notionController = require('./controllers/notionController');
+const openAiController = require('./controllers/openAiController.js');
 
 const server = new Server();
 server.usePlugin(LoggerPlugin);
 
-//FIXME: 응답지연됐을때 에러핸들링
-server.on('message', async (msg) => {
-  try {
-    await onNotionMessage(msg);
-  } catch (err) {
-    console.error(err);
-    msg.reply(`${err}`);
-  }
-});
+try {
+  server.on('message', async (msg) => {
+    try {
+      await notionController.onNotionMessage(msg);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  });
+} catch (err) {
+  console.error(err);
+}
+
+try {
+  server.on('message', async (msg) => {
+    try {
+      await openAiController.onOpenAiMessage(msg);
+    } catch (err) {
+      console.error(err);
+      msg.reply(`${err}`);
+    }
+  });
+} catch (err) {
+  console.error(err);
+}
 
 server.start(3000);

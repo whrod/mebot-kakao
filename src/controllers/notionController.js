@@ -3,10 +3,12 @@ const {
   notionCommands,
   sendMsgRooms,
   receiveMsgRooms,
-  replyMessages,
+  notionReplyMessages,
   limitTimes,
-  notionManual,
-} = require('../constants/notionConstants');
+  manual,
+  commonCommands,
+  commonReplyMessages,
+} = require('../constants/constants');
 
 const onNotionMessage = async (msg, cmd) => {
   const prefix = '>';
@@ -18,11 +20,11 @@ const onNotionMessage = async (msg, cmd) => {
 
   //pingTest
   //>ping
-  if (cmd === notionCommands.pingTest) {
+  if (cmd === commonCommands.pingTest) {
     const timestamp = Date.now();
 
     try {
-      await msg.reply(replyMessages.msgPong);
+      await msg.reply(commonReplyMessages.msgPong);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -32,11 +34,11 @@ const onNotionMessage = async (msg, cmd) => {
 
   //manual
   //>manual
-  if (notionCommands.manual.includes(cmd)) {
+  if (commonCommands.manual.includes(cmd)) {
     const timestamp = Date.now();
 
     try {
-      await msg.reply(notionManual.replaceAll(',', ' '));
+      await msg.reply(manual.replaceAll(',', ' '));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
       console.error(err);
@@ -48,12 +50,15 @@ const onNotionMessage = async (msg, cmd) => {
   //>session
   if (
     msg.room === sendMsgRooms.testSendRoom &&
-    cmd === notionCommands.sessionTest
+    cmd === commonCommands.sessionTest
   ) {
     const timestamp = Date.now();
 
     try {
-      await msg.reply(replyMessages.msgAlarmTest, receiveMsgRooms.testRecRoom);
+      await msg.reply(
+        commonReplyMessages.msgAlarmTest,
+        receiveMsgRooms.testRecRoom
+      );
       msg.reply(notionService.notionPageUrl, receiveMsgRooms.testRecRoom);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
@@ -74,7 +79,7 @@ const onNotionMessage = async (msg, cmd) => {
 
       try {
         await msg.reply(
-          replyMessages.msgAlarmTodoMorning,
+          notionReplyMessages.msgAlarmTodoMorning,
           receiveMsgRooms.studyRecRoom
         );
         msg.reply(notionService.notionPageUrl, receiveMsgRooms.studyRecRoom);
@@ -100,11 +105,11 @@ const onNotionMessage = async (msg, cmd) => {
 
         if (result.length > 0) {
           msg.reply(
-            replyMessages.msgAlarmTodoPenalty,
+            notionReplyMessages.msgAlarmTodoPenalty,
             receiveMsgRooms.studyRecRoom
           );
           msg.reply(
-            replyMessages.msgPenaltyAccount,
+            notionReplyMessages.msgPenaltyAccount,
             receiveMsgRooms.studyRecRoom
           );
           msg.reply(
@@ -115,7 +120,7 @@ const onNotionMessage = async (msg, cmd) => {
         }
         if (result.length === 0) {
           msg.reply(
-            replyMessages.msgNoTodoPenalty,
+            notionReplyMessages.msgNoTodoPenalty,
             receiveMsgRooms.studyRecRoom
           );
           msg.reply(`${Date.now() - timestamp}ms`);
@@ -151,12 +156,12 @@ const onNotionMessage = async (msg, cmd) => {
 
       switch (result.length) {
         case 0:
-          msg.reply(replyMessages.msgNoTodoList);
+          msg.reply(notionReplyMessages.msgNoTodoList);
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
         default:
-          msg.reply(replyMessages.msgCallTodoList);
+          msg.reply(notionReplyMessages.msgCallTodoList);
           msg.reply(result.toString().replaceAll(',', '\n'));
           msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -177,7 +182,7 @@ const onNotionMessage = async (msg, cmd) => {
 
       switch (result.length) {
         case 0:
-          msg.reply(replyMessages.msgNoTodoPenalty);
+          msg.reply(notionReplyMessages.msgNoTodoPenalty);
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
@@ -187,7 +192,7 @@ const onNotionMessage = async (msg, cmd) => {
             (currentTime.getHours() == limitTimes.todoLimitHour &&
               currentTime.getMinutes() < limitTimes.todoLimitMinute)
           ) {
-            msg.reply(replyMessages.msgNoLimitTimeTodo);
+            msg.reply(notionReplyMessages.msgNoLimitTimeTodo);
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
@@ -197,8 +202,8 @@ const onNotionMessage = async (msg, cmd) => {
             (currentTime.getHours() == limitTimes.todoLimitHour &&
               currentTime.getMinutes() >= limitTimes.todoLimitMinute)
           ) {
-            msg.reply(replyMessages.msgLimitTimeOverTodo);
-            msg.reply(replyMessages.msgPenaltyAccount);
+            msg.reply(notionReplyMessages.msgLimitTimeOverTodo);
+            msg.reply(notionReplyMessages.msgPenaltyAccount);
             msg.reply(result.toString().replaceAll(',', '\n'));
             msg.reply(`${Date.now() - timestamp}ms`);
           }
@@ -214,7 +219,7 @@ const onNotionMessage = async (msg, cmd) => {
     const timestamp = Date.now();
 
     try {
-      await msg.reply(replyMessages.msgInterviewList);
+      await msg.reply(notionReplyMessages.msgInterviewList);
       msg.reply(notionService.interviewPageUrl);
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
@@ -232,12 +237,12 @@ const onNotionMessage = async (msg, cmd) => {
 
       switch (result.length) {
         case 0:
-          msg.reply(replyMessages.msgNoThisWeekBlog);
+          msg.reply(notionReplyMessages.msgNoThisWeekBlog);
           msg.reply(`${Date.now() - timestamp}ms`);
           break;
 
         default:
-          msg.reply(replyMessages.msgCallBlogList);
+          msg.reply(notionReplyMessages.msgCallBlogList);
           msg.reply(result.toString().replaceAll(',', '\n'));
           msg.reply(`${Date.now() - timestamp}ms`);
       }
@@ -253,7 +258,7 @@ const onNotionMessage = async (msg, cmd) => {
     const timestamp = Date.now();
     try {
       let result = await notionService.getMemberSns(cmd);
-      msg.reply(cmd + replyMessages.msgCallSnsList);
+      msg.reply(cmd + notionReplyMessages.msgCallSnsList);
       msg.reply(result.toString().replaceAll(',', '\n'));
       msg.reply(`${Date.now() - timestamp}ms`);
     } catch (err) {
