@@ -30,10 +30,10 @@ const onOpenAiMessage = async (msg, cmd) => {
   //^command
   if (cmd !== commonCommands.pingTest) {
     const timestamp = Date.now();
+    await msg.reply(openAiReplyMessages.msgDelayInfo);
     let result = await chatGptService.runCompletion(cmd);
 
     try {
-      await msg.reply(openAiReplyMessages.msgDelayInfo);
       // await Promise.all(msg.reply(result));
       await msg.reply(result);
       await msg.reply(`${Date.now() - timestamp}ms`);

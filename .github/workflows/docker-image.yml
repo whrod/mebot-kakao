@@ -61,6 +61,8 @@ jobs:
             NOTION_REF_SITES_DATABASE_ID=${{ secrets.NOTION_REF_SITES_DATABASE_ID}}
             NOTION_PROJECT_IDEAS_DATABASE_ID=${{ secrets.NOTION_PROJECT_IDEAS_DATABASE_ID}}
             NOTION_MEETING_SCHEDULE_DATABASE_ID=${{ secrets.NOTION_MEETING_SCHEDULE_DATABASE_ID}}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY}}
+            OPENAI_ORG_ID=${{ secrets.OPENAI_ORG_ID}}
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest

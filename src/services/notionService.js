@@ -155,6 +155,7 @@ const getBlogPenaltyList = async (teamMembers) => {
   return blogPenaltyList;
 };
 
+//TODO: 팀원 이름 constants가 아닌 notion db에서 cmd 비교할 수 있게
 const getMemberSns = async (cmd) => {
   const snsFilter = filter('이름', 'multi_select', 'contains', cmd);
   const response = await notionDbQuery(memberSnsDatabaseId, snsFilter);
