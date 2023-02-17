@@ -87,9 +87,12 @@ jobs:
           sudo -E bash -c 'echo "/var/lib/docker/containers/*/*.log {
             rotate 5
             daily
-            size 5mb
+            size 5M
             missingok
           }" > /etc/logrotate.d/docker-cicd'
+
+      - name: Give permission to logrotate cron job
+        uses: actions/checkout@v2
 
       - name: Configure logrotate cron job
         run: |

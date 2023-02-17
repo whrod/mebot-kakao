@@ -254,6 +254,7 @@ const onNotionMessage = async (msg, cmd) => {
 
   //팀원들 개인사이트(이름 / url)
   //>이름
+  //TODO: 팀원 이름 constants가 아닌 notion db에서 cmd 비교할 수 있게
   if (notionCommands.snsList.includes(cmd)) {
     const timestamp = Date.now();
     try {
