@@ -97,3 +97,5 @@
 - [x] chatGPT API 연동
 - [ ] Upbit API 연동 (실시간 현재가)
 - [x] 주말 관련 로직
+
+## build test
